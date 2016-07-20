@@ -1,0 +1,206 @@
+---
+title: "R Programming"
+subtitle: "Advanced Graphics with ggplot"
+author: | 
+  | Brad Boehmke, Ph.D.
+output: 
+  ioslides_presentation:
+    logo: images/uc_logo2.png
+    widescreen: true
+    smaller: true
+    transition: 0.01
+---
+
+
+# Key Things to Remember
+
+## What to Remember from this Section
+
+Every ggplot2 plot has three key components:
+
+1. Data
+2. A set of aesthetic mappings between variables in the data and visual
+properties
+3. At least one layer which describes how to render each observation. Layers
+are usually created with a geom function.
+
+
+# GR&A | That means grounds rules & assumptions
+
+## R package used...
+
+<br><br><br>
+
+<center>
+<font size="7" color="#d6d6d6">
+install.packages("ggplot2")
+</font>
+</center>
+
+<br>
+
+<center>
+<font size="7">
+library(ggplot2)
+</font>
+</center>
+
+<br><br><br><br>
+
+<center>
+<font size="6">
+We'll use the built-in `mpg` data set
+</font>
+</center>
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(ggplot2)
+```
+
+
+
+# Fundamentals of ggplot
+
+## First Layer is, well, boring
+
+```{r, eval=FALSE}
+# equivalent syntax
+ggplot(data = mpg, aes(x = displ, y = hwy))
+ggplot(mpg, aes(displ, hwy))
+```
+
+
+```{r, fig.align='center', echo=FALSE, fig.height=4}
+ggplot(mpg, aes(displ, hwy))
+```
+
+## Let's Add Geoms
+
+To display the data we need to tell ggplot what to draw
+
+-----------------       ----------------------------------     
+`geom_histogram()`      histogram
+`geom_freqpoly()`       frequency polygon
+`geom_bar()`            bar chart
+`geom_point()`          scatter plot
+`geom_line()`           line chart
+`geom_boxplot()`        boxplot
+-----------------       ----------------------------------
+
+<br>
+
+Check out all the available geoms at [docs.ggplot2.org/current](docs.ggplot2.org/current)
+
+# Univariate Geoms
+
+## Histogram & Frequency Polygons
+
+```{r, eval=FALSE}
+ggplot(data = mpg, aes(x = hwy)) +
+        geom_histogram()
+
+ggplot(data = mpg, aes(x = hwy)) +
+        geom_freqpoly()
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3, warning=FALSE, message=FALSE}
+p1 <- ggplot(data = mpg, aes(x = hwy)) +
+        geom_histogram()
+
+p2 <- ggplot(data = mpg, aes(x = hwy)) +
+        geom_freqpoly()
+
+library(gridExtra)
+grid.arrange(p1, p2, ncol = 2)
+```
+
+## Histogram & Frequency Polygons
+```{r, eval=FALSE}
+ggplot(data = mpg, aes(x = hwy)) +
+        geom_histogram(bins = 25, color = "grey30", fill = "white")
+
+ggplot(data = mpg, aes(x = hwy)) +
+        geom_freqpoly(bins = 25, color = "blue")
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3, warning=FALSE, message=FALSE}
+p1 <- ggplot(data = mpg, aes(x = hwy)) +
+        geom_histogram(bins = 25, color = "grey30", fill = "white")
+
+p2 <- ggplot(data = mpg, aes(x = hwy)) +
+        geom_freqpoly(bins = 25, color = "blue")
+
+library(gridExtra)
+grid.arrange(p1, p2, ncol = 2)
+```
+
+
+## Bar Chart
+```{r, eval=FALSE}
+ggplot(data = mpg, aes(x = class)) +
+        geom_bar()
+
+ggplot(data = mpg, aes(x = cyl)) +
+        geom_bar()
+
+ggplot(data = mpg, aes(x = factor(cyl))) +
+        geom_bar()
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3, warning=FALSE, message=FALSE}
+p1 <- ggplot(data = mpg, aes(x = class)) +
+        geom_bar()
+
+p2 <- ggplot(data = mpg, aes(x = cyl)) +
+        geom_bar()
+
+p3 <- ggplot(data = mpg, aes(x = factor(cyl))) +
+        geom_bar()
+
+grid.arrange(p1, p2, p3, ncol = 3)
+```
+
+
+## Your Turn
+
+<br>
+
+<font size="6">
+Import the `facebook.tsv` file in the data folder
+</font>
+
+<br>
+
+<blockquote>
+<font size="6">
+1. Assess the distribution of age. What does this tell you?
+</font>
+</blockquote>
+
+<br>
+
+<blockquote>
+<font size="6">
+2. Assess the distribution of age with a boxplot. What does this tell you?
+</font>
+</blockquote>
+
+<br>
+
+<blockquote>
+<font size="6">
+3. Assess the frequency of each gender. What does this tell you?
+</font>
+</blockquote>
+
+
+## Solution
+
+# Bivariate Geoms
+
+
+
+# Multivariate Capabilities
+
+
+

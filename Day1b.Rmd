@@ -1,0 +1,678 @@
+---
+title: "R Programming"
+subtitle: "I need structure!"
+author: | 
+  | Brad Boehmke, Ph.D.
+date: "August 6, 2016"
+output: 
+  ioslides_presentation:
+    logo: images/uc_logo2.png
+    widescreen: true
+    smaller: true
+    transition: 0.01
+---
+
+# Key Things to Know
+
+## What to Remember from this Section  | Primary data structures to hold your data
+
+Four primary structures to hold your data:
+
+- Vectors
+- Matrices
+- Lists
+- Data frames
+- <strike>Arrays</strike> (I will not discuss)
+
+
+Dimensions    |  Homogenous        |  Heterogenous
+------------- |  ----------------  |  ------------
+1D            |  Atomic Vector     |  List
+2D            |  Matrix            |  Data Frame
+*n*D          |  Array             |  
+
+## What to Remember from this Section  | Know how to manage these structures
+
+After this module you should be able to:
+
+1. Apply functions to **understand** your data structure
+2. **Create** vectors, matrices, lists, and data frames
+3. **Extract** elements/subset these data structures
+4. Apply functions to **compare** the elements in these data structures
+5. Apply functions to **summarize** the elements in these data structures
+
+
+# Data Structures | Understanding key properties
+
+## Common Functions to Learn About Your Data Structure
+
+Operator/Function               Description             
+----------------------------    ----------------       
+`str()`                         provides a compact view
+`class()`                       identifies the type of data structure (i.e. matrix, data frame)
+`mode()`                        identifies the nature of the elements in the data structure
+`length()`                      identifies the number of elements in the data structure
+`ncol()`, `nrow()`, `dim()`     identfies the number of columns and rows in the data structure
+`View()`                        opens a spreadsheet-style data viewer
+`head()`, `tail()`              view the first or last *n* parts of a data object
+`names()`                       view the names of data structure components
+----------------------------    ----------------    
+
+
+# Vectors | The fundamental building block
+
+## Vectors: creating
+
+A linear arrangement of *common* elements
+
+We can create vectors with 4 common operators: `:, c(), seq(),` and `rep()`:
+
+```{r, collapse=TRUE}
+# create vector with increments of 1
+1:10
+2.5:15
+
+# create vector by combining non-sequential elements
+c(2, 10, 4)
+
+# sequences with specified arithmetic progression
+seq(from = 0, to = 30, by = 3)
+seq(from = 0, to = 30, length.out = 6)
+
+# replicates of specified values
+rep(1:4, times = 2)
+rep(1:4, each = 2)
+```
+
+
+## Vectors: understanding their properties | Back to Our Facebook Data
+
+Each variable in our `facebook` data is simply a vector. Let's assess the `likes` vector:
+
+```{r, collapse=TRUE, cache=TRUE}
+# read in facebook data and create a vector with the likes data
+facebook <- read.delim("data/facebook.tsv")
+likes <- facebook$likes
+
+class(likes)
+
+str(likes)
+
+length(likes)
+
+head(likes)
+
+tail(likes, 20)
+```
+
+
+## Vectors: extracting/subsetting
+
+**IMPORTANT:** Get to know the bracket `x[]` method
+
+<br>
+
+<center>
+`vector[element to extract]`
+</center>
+
+<br>
+
+```{r, collapse=TRUE}
+# extract elements with bracket notation
+likes[1:10]
+
+likes[c(10, 13512, 3778, 59131)]
+
+# extract elements based on another vector
+subset_vector <- c(10, 13512, 3778, 59131)
+likes[subset_vector]                    
+```
+
+<br>
+
+We can also use comparison operators to subset...
+
+
+## Vectors: comparison operators
+
+- We can use the normal binary comparison operators: `<, >, <=, >=, ==, !=`
+- Produces a logical (`TRUE`/`FALSE`) vector
+
+```{r, collapse=TRUE}
+viral <- likes >= 5000
+dull <- likes == 0
+normal <- likes > 0 & likes < 5000
+
+# TRUE = 1 FALSE = 0 so we can do math with these vectors
+sum(viral)
+sum(dull)
+sum(normal)
+
+sum(viral)/length(likes)
+
+# identify which observations are TRUE
+which(viral)
+```
+
+## Vectors: back to extracting/subsetting
+
+Use logical operators inside `[]` to subset data:
+
+```{r, collapse=TRUE, cache=TRUE}
+# subset data
+likes[likes > 15000]
+
+# save as new vectors with actual values rather than TRUE/FALSE response
+popular <- likes[likes >= 5000]
+lonely <- likes[likes == 0]
+
+# subset based on another vector
+x <- likes > 0 & likes < 5000
+likes[x]
+```
+
+## Vectors: summarizing
+
+```{r, collapse=TRUE, cache=TRUE}
+summary(likes)
+
+# include na.rm = TRUE to exclude any missing data
+mean(likes, na.rm = TRUE)
+
+median(likes)
+
+sd(likes)
+
+range(likes)
+
+min(likes)
+
+max(likes)
+```
+
+
+## Your Turn
+
+Save the `friend_count` variable from the `facebook` data as a vector:
+
+<center>
+`fc <- facebook$friend_count`
+</center>
+
+<br>
+
+
+
+<font size="6">1. What are the min, max, median, and mean number of friends?</font><br><br>
+<font size="6">2. How many people have 0 friends?</font><br><br>
+<font size="6">3. How many people have 1,000 or more friends?</font><br><br>
+<font size="6">4. Which element contains the maximum number of friends?</font>
+
+
+
+## Solution
+
+```{r, collapse=TRUE, cache=TRUE}
+fc <- facebook$friend_count
+
+# 1. What is the min, max, median, and mean number of friends?
+summary(fc)
+
+# 2. How many people have 0 friends?
+sum(fc == 0)
+
+# 3. How many people have 1,000 or more friends?
+sum(fc >= 1000)
+
+# 4. Which element contains the maximum number of friends?
+which(fc == max(fc))
+```
+
+
+
+# Matrices | Just a 2-dimensional vector
+
+## Matrices: creating
+
+3 ways to create matrices; most common approach uses `matrix()` 
+
+```{r, collapse=TRUE}
+# you can specify with just nrow or ncol
+# note that recycling will occur if length of matrix is not a multiple of nrows
+matrix(1:12, nrow = 3, ncol = 3)
+```
+
+Two additional options to create matrices:
+
+```{r, collapse=TRUE}
+rbind(c(1:3), c(4:6))
+
+cbind(c(1:3), c(4:6))
+```
+
+
+## Matrices: understanding their properties
+
+```{r, collapse=TRUE, cache=TRUE}
+# 3x4 matrix of random uniform numbers between 0-1
+m <- matrix(runif(12), nrow = 3)
+
+class(m)
+
+str(m)
+
+length(m)
+
+dim(m)
+```
+
+
+## Matrices: extracting/subsetting
+
+Extracting individual elements and subsetting matrices leverages brackets: 
+
+<center>
+`matrix[row, col]`
+</center>
+
+<br>
+
+```{r, collapse=TRUE, cache=TRUE}
+# extract individual elements
+m[1, 3]
+
+# subset for first two rows and all columns
+m[1:2, ]
+
+# subset for second column (simplify)
+m[, 2]
+
+# subset for second column (don't simplify)
+m[, 2, drop = FALSE]
+```
+
+## Matrices: comparison operators
+
+Can use comparison operators much like you can on vectors:
+
+```{r, collapse=TRUE, cache=TRUE}
+# comparison operators returns a matrix of logical values
+m > .5
+
+# how many elements in the matrix are greater than .5
+sum(m > .5)
+
+# which elements are greater than .5
+which(m > .5)
+
+# subset with comparison returns a vector
+m[m > .5]
+```
+
+
+## Matrices: summarizing
+
+
+```{r, collapse=TRUE, cache=TRUE}
+# provides summary stats for each column of the matrix
+summary(m)
+
+# regular stat functions will be applied across all elements in the matrix
+mean(m)
+
+median(m)
+
+# get statistic for a specific row or column
+mean(m[1, ])
+
+# get statistic for every row (MARGIN = 1) or column (MARGIN = 2)
+apply(m, MARGIN = 1, FUN = mean)
+```
+
+## Your Turn
+
+Back to our facebook friend count vector:
+
+<center>
+`fc <- facebook$friend_count`
+</center>
+
+<br>
+
+<font size="6">1. Subset `fc` to find individuals with **more than 4,600** friends</font><br><br>
+<font size="6">2. Turn this subsetted vector into a **matrix** with **10 rows**</font><br><br>
+<font size="6">3. What are the **dim**ensions of this matrix</font>
+
+## Solution
+
+```{r, collapse=TRUE, cache=TRUE, cache=TRUE}
+# 1. Subset this fc vector to find individuals with more than 4,600 friends
+Q1 <- fc[fc > 4600]
+
+# 2. Turn this subsetted vector into a matrix with 10 rows
+Q2 <- matrix(Q1, nrow = 10)
+
+# 3. What is the dimension of this matrix
+dim(Q2)
+```
+
+
+# Lists | An ordered collection of objects
+
+## Lists: creating
+
+Lists can be confusing at first because they can hold different kinds and dimensions of data
+
+To create a list we use `list()`
+
+```{r, collapse=TRUE, cache=TRUE}
+# list of 4 items
+l1 <- list(item1 = 1:3,
+           item2 = letters[1:5],
+           item3 = c(T, F, T, T),
+           item4 = matrix(1:9, nrow = 3))
+
+l1
+```
+
+## Lists: understanding their properties
+
+```{r, collapse=TRUE, cache=TRUE}
+# 3x4 matrix of random uniform numbers between 0-1
+class(l1)
+
+str(l1)
+
+length(l1)
+
+names(l1)
+```
+
+## Lists:  extracting/subsetting
+
+Elements of lists can be extracted using 3 approaches
+
+<center>
+preserve: `list[component]` <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; simplify: `list[[component]]` <br>
+simplify: `list$component`
+</center>
+
+<br>
+```{r, collapse=TRUE, cache=TRUE}
+l1["item4"]
+
+l1[["item4"]]
+
+l1$item4
+```
+
+## Lists:  extracting/subsetting
+
+What's the difference?
+
+```{r, collapse=TRUE, cache=TRUE}
+class(l1["item4"])
+
+class(l1[["item4"]])
+
+class(l1$item4)
+```
+
+We can also extract individual elements out of list components by using...brackets!
+
+```{r, collapse=TRUE, cache=TRUE}
+# get the 2nd list component
+l1[[2]]
+
+# get the 2nd element out of the 2nd list component
+l1[[2]][2]
+
+l1$item2[2]
+```
+
+## Lists: here's what I want you to know
+
+- Many statistical modeling results will come in the form of lists
+- You need to know how to extract parts of a list to access model results
+
+## Lists: here's what I want you to know
+
+- Many statistical modeling results will come in the form of lists
+- You need to know how to extract parts of a list to access model results
+
+```{r, collapse=TRUE, cache=TRUE}
+# here's a linear regression model
+model <- lm(mpg ~ wt, data = mtcars)
+
+summary(model)
+```
+
+## Lists: here's what I want you to know
+
+- Luckily, `model` is simply a list of statistical results for our regression model
+
+```{r, collapse=TRUE, cache=TRUE}
+# here's a linear regression model
+model <- lm(mpg ~ wt, data = mtcars)
+
+class(model)
+
+mode(model)
+
+names(model)
+
+str(model)
+```
+
+## Lists: here's what I want you to know
+
+- Luckily, `model` is simply a list of statistical results for our regression model
+- so if you want to extract the residuals or fitted values you can just use normal list subsetting procedures:
+
+```{r, collapse=TRUE, cache=TRUE}
+# extract the regression model residuals
+model$residuals
+```
+
+## Your Turn
+
+Create this linear regression model:
+
+```{r, collapse=TRUE, cache=TRUE, eval=FALSE}
+fb_model <- lm(friend_count ~ gender + age, data = facebook)
+```
+
+<br>
+
+<font size="6">1. **Extract** the residuals from the `fb_model` list</font><br><br>
+<font size="6">2. What is the **min**, **max**, **median**, and **mean** of these residuals?</font>
+
+## Solution
+
+```{r, collapse=TRUE, cache=TRUE, fig.align='center', fig.width=6, fig.height=3, message=FALSE, warning=FALSE}
+fb_model <- lm(friend_count ~ gender + age, data = facebook)
+
+# 1. Extract the residuals from the `fb_model` list
+Q1 <- fb_model$residuals
+
+# 2. What is the min, max, median, and mean of these residuals?
+summary(Q1)
+```
+
+# Data Frames | The holy grail of data structures
+
+## Data Frames
+
+Data frames are R's equivalent of an Excel spreadsheet...you need to get intimate with data frames!
+
+```{r, collapse=TRUE, cache=TRUE}
+facebook
+```
+
+## Data Frames: creating
+
+To create data frames we use `data.frame()`
+
+```{r, collapse=TRUE, cache=TRUE}
+df <- data.frame(variable.1 = 1:3,
+                 variable.2 = c("a", "b", "c"),
+                 variable.3 = c(TRUE, TRUE, FALSE))
+```
+
+<br>
+
+But rarely do we create data frames from scratch; rather, we typically import them from data bases so...
+
+<br>
+
+...back to our `facebook` data
+
+## Data Frames: understanding their properties
+
+
+```{r, collapse=TRUE, cache=TRUE}
+class(facebook)
+
+names(facebook)
+
+str(facebook)
+```
+
+
+## Data Frames: extracting/subsetting
+
+Continue loving the brackets:
+
+<center>
+`data.frame[row, col]`
+</center>
+
+<br>
+Try these: 
+```{r, collapse=TRUE, cache=TRUE, eval=FALSE}
+# extract the second column and all rows using column indexing or the name
+facebook[, 2]
+facebook[, "age"]
+
+# extract all rows and columns 1 through 3
+facebook[, 1:3]
+facebook[, c("userid", "age", "dob_day")]
+
+# subset for first row and all columns
+facebook[1, ]
+
+# use a vector to subset
+columns <- c(2, 3, 5)
+rows <- c(1:25)
+facebook[rows, columns]
+```
+
+
+## Data Frames: conditional subsetting
+
+The `subset()` function is a particularly useful function to subset data frames based on conditional statements:
+
+<center>
+`subset[data.frame, row condition, column selection]`
+</center>
+
+<br>
+
+Try these:
+```{r, collapse=TRUE, cache=TRUE, eval=FALSE}
+# get all users that are 113 years old and select the first ten columns
+subset(facebook, age == 113, 1:10)
+
+# get all males older than 35 and select the likes column
+subset(facebook, gender == "male" & age > 35, likes)
+```
+
+## Data Frames: summarizing
+
+We'll cover data frame summarization in more detail during the [Transforming your data with dplyr session]()
+
+```{r, collapse=TRUE, cache=TRUE}
+# summarize a single variable (column)
+summary(facebook$tenure)
+
+# summarize specific variables (columns)
+summary(facebook[, c("age", "friend_count")])
+
+# summary stats for all columns
+summary(facebook)
+```
+
+## Your Turn
+
+<font size="6">1. **Import** the `reddit` data located at<br><br> &nbsp;&nbsp;&nbsp;&nbsp;[https://bradleyboehmke.github.io/public/data/reddit.csv](https://bradleyboehmke.github.io/public/data/reddit.csv)</font><br><br><br>
+<font size="6">2. What variables (column **names**) does this data frame contain?</font><br><br><br>
+<font size="6">3. How many users have the **employment status** of "Student"?</font><br><br><br>
+<font size="6">4. **Subset** the `reddit` data frame for only those individuals that<br>&nbsp;&nbsp;&nbsp;&nbsp;are students.</font>
+
+## Solution
+
+```{r, collapse=TRUE, cache=TRUE, eval=FALSE}
+# 1. Import the reddit data located at https://bradleyboehmke.github.io/public/data/reddit.csv
+url <- "https://bradleyboehmke.github.io/public/data/reddit.csv"
+reddit <- read.csv(url)
+
+# 2. What variables (column names) does this data frame contain?
+names(reddit)
+
+# 3. How many users have the employment status of "Student"?
+summary(reddit$employment.status)
+
+# 4. Subset the reddit data frame for only those individuals that are students.
+students <- subset(reddit, employment.status == "Student")
+```
+
+# Key Things to Remember
+
+## Remember These Functions!
+
+Operator/Function               Description             
+----------------------------    ----------------      
+`str()`                         provides a compact view
+`class()`                       identifies the type of data structure (i.e. matrix, data frame)
+`mode()`                        identifies the nature of the elements in the data structure
+`length()`                      identifies the number of elements in the data structure
+`ncol()`, `nrow()`, `dim()`     identfies the number of columns and rows in the data structure
+`View()`                        opens a spreadsheet-style data viewer
+`head()`, `tail()`              view the first or last *n* parts of a data object
+`names()`                       view the names of data structure components
+`:`, `c()`, `seq()`, `rep()`    create vectors
+`matrix()`                      create matrices
+----------------------------    ----------------     
+
+## Remember These Functions!
+
+Operator/Function               Description             
+----------------------------    ----------------      
+`list()`                        create lists
+`data.frame()`                  create data frames
+`[]`, `[[]]`, `$`               extract/subset data structures
+`subset()`                      conditional subsetting for data frames
+`<, >, <=, >=, ==, !=`          comparison operators
+`sum()`, `mean()`, `median()`   statistical summary functions
+`sd()`, `range()`, `min()`      statistical summary functions
+`max()`, `summary()`            statistical summary functions
+----------------------------    ----------------   
+
+## Break {.flexbox .vcenter}
+
+<div class="centered">
+
+<font size="10">5 minutes!</font>
+
+</div>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,498 @@
+---
+title: "R Programming"
+subtitle: "A tidy data set is a happy data set!"
+author: | 
+  | Brad Boehmke, Ph.D.
+output: 
+  ioslides_presentation:
+    logo: images/uc_logo2.png
+    widescreen: true
+    smaller: true
+    transition: 0.01
+---
+
+## because...
+
+<blockquote>
+*"Classroom data are like teddy bears and real data are like a grizzley bear with salmon blood dripping out its mouth."*
+</blockquote>
+
+<p align="right">
+Jenny Bryan &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+
+<br><br>
+
+<blockquote>
+*"Up to 80% of data analysis is spent on the process of cleaning and preparing data."*
+</blockquote>
+<br>
+<p align="right">
+cf. Wickham, 2014 and Dasu & Johnson, 2003 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+
+<br><br>
+
+<blockquote>
+*"Cannot emphasize enough how much time you save by putting analysis efforts into tidying data first."*
+</blockquote>
+
+<p align="right">
+Hilary Parker &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+
+
+
+# Key Things to Remember
+
+## Tidy Data
+
+<blockquote>
+<font size="7">
+1. One variable per column
+</font>
+</blockquote>
+
+<blockquote>
+<font size="7">
+2. One observation per row
+</font>
+</blockquote>
+<br>
+
+```{r, collapse=FALSE, echo=FALSE}
+read.delim("data/facebook.tsv")
+```
+
+## Tidy Data
+
+<font size="7">
+Is this data tidy?
+</font>
+
+<br>
+
+```{r, collapse=FALSE, echo=FALSE}
+read.csv("~/Desktop/Personal/Education & Training/Personal Analyses/Cost per H.S. Graduate/graduates.csv")
+```
+
+## Tidy Data
+
+<font size="7">
+Is this data tidy?
+</font>
+
+<br>
+
+```{r, collapse=FALSE, echo=FALSE}
+read.csv("~/Desktop/Personal/Education & Training/Personal Analyses/Race_and_education/SeriesReport-20150124160350.csv")
+```
+
+## Tidy Data
+
+<font size="7">
+Is this data tidy?
+</font>
+
+<br>
+
+```{r, collapse=FALSE, echo=FALSE, warning=FALSE, message=FALSE}
+library(magrittr)
+library(tidyr)
+
+read.csv("data/regions.csv") %>%
+        unite(state, c(state, state.abreviated), sep = " ")
+```
+
+
+## What to Remember from this Section
+
+<font size="6">
+`tidyr` is a package that <u>reshapes</u> the layout of data frames:
+</font>
+
+<br><br>
+
+<font size="5">[`gather()`](#14): transforms data from wide to long</font><img src="images/gather_icon.png" style="float:left; margin:0 40px 0 0;" width="12%">
+
+<br>
+
+<font size="5">[`spread()`](#22): transforms data from long to wide</font><img src="images/spread_icon.png" style="float:left; margin:0 40px 0 0;" width="12%">
+
+<br>
+
+<font size="5">[`separate()`](#28): splits a single column into multiple columns</font><img src="images/separate_icon.png" style="float:left; margin:0 40px 0 0;" width="12%">
+
+<br>
+
+<font size="5">[`unite()`](#36): combines multiple columns into a single column</font><img src="images/unite_icon.png" style="float:left; margin:0 40px 0 0;" width="12%"/>
+
+
+# GR&A | That means grounds rules & assumptions
+
+## R package used...
+
+<br><br><br>
+
+<center>
+<font size="7" color="#d6d6d6">
+install.packages("tidyr")
+</font>
+</center>
+
+<br>
+
+<center>
+<font size="7">
+library(tidyr)
+</font>
+</center>
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(tidyr)
+```
+
+
+## data used...
+
+<br><br><br>
+
+<center>
+<font size="7" color="#d6d6d6">
+install.packages("EDAWR")
+</font>
+</center>
+
+<br>
+
+<center>
+<font size="7">
+library(EDAWR)
+</font>
+</center>
+
+<br>
+<br>
+<center>
+<font size="6">
+Data sets:</font> <font size="6" color="000000">cases & storms</font>
+</font>
+</center>
+
+## %>% operator... | learn it, love it, leverage it
+
+<ul>
+  <li><font size="5"><a href="https://cran.r-project.org/web/packages/magrittr/index.html">magrittr</a> &#8594; <a href="https://twitter.com/stefanbache">Stefan Milton Bache</a></font>
+  <li><font size="5">not required but extremely convenient</font>
+</ul>  
+<br><br>
+<center>filter(data, variable == *numeric_value*)</center>
+<br>
+<center><u>*or*</u></center>
+<br>
+<center>data <mark>%>%</mark> filter(variable == *numeric_value*)</center>
+
+## %>% operator... | learn it, love it, leverage it
+
+```{r, echo=TRUE, eval=FALSE}
+arrange(
+        summarize(
+                filter(data, variable == "numeric_value"),
+                Total = sum(variable)
+        ),
+        desc(Total)
+)
+```
+
+```{r, echo=TRUE, eval=FALSE}
+a <- filter(data, variable == "numeric_value")
+b <- summarise(a, Total = sum(variable))
+c <- arrange(b, desc(Total))
+```
+
+```{r, echo=TRUE, eval=FALSE}
+data %>%
+        filter(variable == "value") %>%
+        summarise(Total = sum(variable)) %>%
+        arrange(desc(Total))
+```
+
+<center>*Same results but the %>% operator is more efficient and legible*</center>  
+
+
+# gather( ) | Transform data from wide to long
+
+## gather( )<img src="images/gather_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/gather_2.png" width="80%" height="80%"/>
+</center>
+
+## gather( )<img src="images/gather_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/gather_3.png" width="80%" height="80%"/>
+</center>
+
+## gather( )<img src="images/gather_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/gather_4.png" width="80%" height="80%"/>
+</center>
+
+## gather( )<img src="images/gather_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/gather_5.png" width="80%" height="80%"/>
+</center>
+
+## gather( )<img src="images/gather_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/gather_6.png" width="80%" height="80%"/>
+</center>
+
+## gather( )<img src="images/gather_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+Code alternatives:
+```{r, echo=TRUE, eval=FALSE}
+These all produce the same results:
+        cases %>% gather(Year, n, `2011`:`2013`)
+        cases %>% gather(Year, n, `2011`, `2012`, `2013`)
+        cases %>% gather(Year, n, 2:4)
+        cases %>% gather(Year, n, -Country)
+
+Also note that if you do not supply arguments for na.rm or convert values then the defaults are used
+```
+
+<center>
+<img src="images/gather_7.png" width="50%" height="50%"/>
+</center>
+
+## Your Turn
+
+<br><br>
+
+<center>
+<font size="6">
+Import the `expenditures.csv` file in the data folder
+</font>
+
+<br><br><br>
+
+<font size="7">Reshape this data from wide to long</font>
+</center>
+
+
+
+# spread( ) | Transform data from long to wide
+
+## spread( )<img src="images/spread_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/spread_2.png" width="80%" height="80%"/>
+</center>
+
+## spread( )<img src="images/spread_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/spread_3.png" width="80%" height="80%"/>
+</center>
+
+## spread( )<img src="images/spread_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/spread_4.png" width="80%" height="80%"/>
+</center>
+
+## spread( )<img src="images/spread_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/spread_5.png" width="80%" height="80%"/>
+</center>
+
+
+
+## Your Turn
+
+<br><br>
+
+<center>
+<font size="7">
+Create the following data frame:
+
+<br>
+
+`long <- expenditures %>% gather(Year, Costs, 2:15)`
+
+</font>
+
+<br><br>
+
+<font size="7">Reshape this data from long to wide</font>
+</center>
+
+
+
+# separate( ) | Split a single column into multiple columns
+
+## separate( )<img src="images/separate_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/separate_2.png" width="80%" height="80%"/>
+</center>
+
+## separate( )<img src="images/separate_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/separate_3.png" width="80%" height="80%"/>
+</center>
+
+## separate( )<img src="images/separate_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/separate_4.png" width="80%" height="80%"/>
+</center>
+
+## separate( )<img src="images/separate_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/separate_5.png" width="80%" height="80%"/>
+</center>
+
+## separate( )<img src="images/separate_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/separate_6.png" width="80%" height="80%"/>
+</center>
+
+## separate( )<img src="images/separate_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+Code alternatives:
+```{r, echo=TRUE, eval=FALSE}
+These produce the same results:
+        storms %>% separate(date, c("year", "month", "day"))
+        storms %>% separate(date, c("year", "month", "day"), sep = "-")
+        
+By default, if no separator is specified, will separate by any regular expression that matches any sequence 
+of non-alphanumeric values
+```
+
+<center>
+<img src="images/separate_7.png" width="50%" height="50%"/>
+</center>
+
+## Your Turn
+
+<br>
+
+<font size="6">
+Import the `expenditures.csv` file in the data folder
+</font>
+
+<br>
+
+<font size="7">1. Reshape this data from wide to long</font>
+
+<br><br>
+
+<font size="7">2. Separate `FY` from the Year</font>
+
+<br><br><br><br>
+
+**HINT:** You should end with four variables: 1) State name, 2) A variable of just "FY", 3) Year, 4) Costs
+
+
+
+# unite( ) | Combine multiple columns into a single column
+
+## unite( )<img src="images/unite_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/unite_2.png" width="80%" height="80%"/>
+</center>
+
+## unite( )<img src="images/unite_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/unite_3.png" width="80%" height="80%"/>
+</center>
+
+## unite( )<img src="images/unite_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/unite_4.png" width="80%" height="80%"/>
+</center>
+
+## unite( )<img src="images/unite_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/unite_5.png" width="80%" height="80%"/>
+</center>
+
+## unite( )<img src="images/unite_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+<center>
+<img src="images/unite_6.png" width="80%" height="80%"/>
+</center>
+
+## unite( )<img src="images/unite_icon.png" style="float:left; margin:15px 20px 0 0;" width="12%"/>
+
+Code alternatives:
+```{r, echo=TRUE, eval=FALSE}
+These produce the same results:
+        storms %>% unite(date, year, month, day, sep = "_")
+        storms %>% unite(date, year, month, day)
+
+If no separator is identified, "_" will automatically be used
+```
+
+<center>
+<img src="images/unite_1.png" width="50%" height="50%"/>
+</center>
+
+## Your Turn
+
+<br><br>
+
+<center>
+<font size="7">
+Import the `facebook.tsv` file
+</font>
+
+<br><br>
+
+<font size="7">Combine the `dob_year`, `dob_month` & `dob_day` variables</font>
+</center>
+
+
+# Key Things to Remember
+
+## Remember These Functions!
+
+
+<font size="6">
+`tidyr` is a package that <u>reshapes</u> the layout of data frames:
+</font>
+
+<br><br>
+
+<font size="5">[`gather()`](#14): transforms data from wide to long</font><img src="images/gather_icon.png" style="float:left; margin:0 40px 0 0;" width="12%">
+
+<br>
+
+<font size="5">[`spread()`](#22): transforms data from long to wide</font><img src="images/spread_icon.png" style="float:left; margin:0 40px 0 0;" width="12%">
+
+<br>
+
+<font size="5">[`separate()`](#28): splits a single column into multiple columns</font><img src="images/separate_icon.png" style="float:left; margin:0 40px 0 0;" width="12%">
+
+<br>
+
+<font size="5">[`unite()`](#36): combines multiple columns into a single column</font><img src="images/unite_icon.png" style="float:left; margin:0 40px 0 0;" width="12%"/>
+
+
+## Break {.flexbox .vcenter}
+
+<div class="centered">
+
+<font size="10">5 minutes!</font>
+
+</div>

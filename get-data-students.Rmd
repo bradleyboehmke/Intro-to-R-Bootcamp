@@ -1,0 +1,276 @@
+---
+title: "R Programming"
+subtitle: "Get me some data!"
+author: | 
+  | Brad Boehmke, Ph.D.
+output: 
+  ioslides_presentation:
+    logo: images/uc_logo2.png
+    widescreen: true
+    smaller: true
+    transition: 0.01
+---
+
+
+# Key Things to Know
+
+## What to Remember from this Section
+<br><br>
+
+1. Lots of built-in data sets provided by R
+2. Text files use delimiters - these determine the function to read in the data
+3. There is no base R function to read in Excel data - must use a package
+4. Web scraping is a dense subject but scraping online text/Excel files *can* be as easy as reading in these files from your hard drive
+
+
+# Built-in Data
+
+## Built-in Data Sets
+
+- R has many built-in data sets
+- type `data()` into your console (104 data sets should appear)
+
+```{r}
+mtcars
+```
+
+## Built in Data Sets
+
+- R also has many convenient built-in character strings to be aware of
+- Try these:
+
+```{r, collapse=TRUE, eval=FALSE}
+letters
+LETTERS
+month.abb
+month.name
+state.abb
+state.division
+state.name
+state.region
+```
+
+<br>
+
+### Note
+
+- to load any of these data sets/strings into your global environment: `data("name of data set")`
+- type `?name` to get more information about the built-in data
+
+
+## Your Turn
+
+<br>
+<br>
+
+<font size="10">
+`1.` Load the `iris` data set
+
+<br>
+
+`2.` What is this data measuring?
+</font>
+
+
+
+
+
+# Importing Text Files
+
+## Importing Text Files | .csv .txt .tsv
+
+- Text files are a popular way to hold and exchange tabular data
+- Text file formats use **delimiters** to separate the different elements
+    - .csv
+    - .txt
+    - .tsv
+- These delimiters help us know what functions to use to read in the data
+- I'll illustrate with the following files in the R-Bootcamp download file
+    - `mydata.csv`
+    - `mydata.txt`
+    - `mydata.tsv`
+
+## Importing Text Files | Base R
+
+Use `read.csv` for comma separated files (automatically sets the `sep = ","`)
+```{r, collapse=TRUE, warning=FALSE}
+read.csv("data/mydata.csv")
+```
+<br>
+
+Use `read.delim` for tab delimited files (automatically sets the `sep = "\t"`)
+```{r, collapse=TRUE, warning=FALSE}
+read.delim("data/mydata.txt")
+```
+
+## Importing Text Files | Base R
+
+When importing data, save to a file by using the assignment operator:
+
+```{r, collapse=TRUE, warning=FALSE}
+mydata <- read.delim("data/mydata.tsv")
+
+mydata
+```
+
+<br>
+
+- You now have a data object in your global environment named `mydata`
+- View your data in a spreadsheet form:
+    - clicking on the object in the global environment space or 
+    - type `View(mydata)` in your console
+
+
+## Your Turn
+<br>
+<br>
+
+<font size="10">
+`1.` Read in the `facebook.tsv` file
+</font>
+
+<br>
+
+<font size="10">
+`2.` Save it as an object titled `facebook`
+</font>
+
+<br>
+
+<font size="10">
+`3.` Take a peek at what this data looks like
+</font>
+
+
+
+
+
+# Importing Excel Files
+
+## Importing Excel Files
+
+- Excel is still the spreadsheet software of choice
+- Base R does not have an Excel importing function but we can use the [`readxl`](https://cran.rstudio.com/web/packages/readxl/) package
+
+```{r, collapse=TRUE, warning=FALSE}
+# if you haven't installed the readxl package run the following line (minus hashtag)
+# install.packages("readxl")
+
+library(readxl)
+
+read_excel("data/mydata.xlsx", sheet = "Sheet5")
+```
+
+- Benefits of `readxl`
+    - recognizes date and time variables
+    - keeps text variables as characters rather than factors (more to come on this)
+    - does not collapse variable names
+    - read more about `readxl` capabilities [here]()
+- `xlsx` is an alternative package for reading in Excel files
+
+## Your Turn
+<br>
+
+<font size="7">`1.` Read in the spreadsheet titled</font><br><br>
+<font size="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`3. Median HH income, metro` in the 
+`PEW Middle` <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`Class Data.xlsx` file</font><br><br><br>
+<font size="7">`2.` Save it as an object titled `pew`</font><br><br><br>
+<font size="7">`3.` Take a peek at what this data looks like</font>
+
+<br>
+<br>
+
+**Hint:** You will need to skip 5 lines &#9755; check out the help file on `read_excel` to do this
+
+
+
+# Scraping Online Files
+
+## Scraping Online Files | Tabular files
+
+- Dense subject with *LOTS* to learn
+- We'll only focus on reading in tabular and Excel files stored online
+- For more info regarding "real web scraping" see the tutorial at: [uc-r.github.io/scraping](uc-r.github.io/scraping)
+
+<br>
+
+Let's download some data from [https://www.data.gov/metrics](https://www.data.gov/metrics):
+
+```{r, collapse=TRUE, eval=FALSE}
+# the url for the online CSV
+url <- "https://www.data.gov/media/federal-agency-participation.csv" 
+
+# use read.csv to import
+data_gov <- read.csv(url, stringsAsFactors = FALSE)
+
+View(data_gov)
+```
+
+## Scraping Online Files | Excel files
+
+- Scraping online Excel files follows a similar process
+- `gdata` package is particular easy to use
+
+<br>
+
+Let's download some data from [Fair Market Rents for Section 8 Housing](http://catalog.data.gov/dataset/fair-market-rents-for-the-section-8-housing-assistance-payments-program/resource/2d33555e-5d21-4baf-84a2-e4fb3aed0807):
+
+```{r, collapse=TRUE, eval=FALSE}
+library(gdata)
+
+url <- "http://www.huduser.org/portal/datasets/fmr/fmr2015f/FY2015F_4050_Final.xls"
+
+# use read.xls to import
+rents <- read.xls(url)
+
+View(data_gov)
+```
+
+## Your Turn
+<br>
+<br>
+
+<font size="7">
+`1.` Download the file stored at:<br>
+</font>
+
+<font size="5">
+`https://bradleyboehmke.github.io/public/data/reddit.csv`
+</font>
+
+<br>
+
+<font size="7">
+`2.` Save it as an object titled `reddit`
+</font>
+
+<br>
+
+<font size="7">
+`3.` Take a peek at what this data looks like
+</font>
+
+
+
+# Key Things to Remember
+
+## Remember These Functions!
+
+Operator/Function       Description             
+-----------------       ----------------       
+`data()`                access built-in data sets              
+`?`                     will provide you information regarding built-in data (i.e. `?mtcars`)                
+`read.csv()`            base R function for reading in .csv files (can also be used to read in a .csv file stored online)
+`read.delim()`          base R function for reading in .txt and .tsv files
+`read_excel()`          imports Excel data (provided by the `readxl` package)
+`read.xls()`            imports Excel data stored online (provided by the `gdata` package)
+`View()`                opens a spreadsheet-style data viewer
+-----------------       ----------------        
+
+## Break {.flexbox .vcenter}
+
+<div class="centered">
+
+<font size="10">5 minutes!</font>
+
+</div>

@@ -1,0 +1,598 @@
+---
+title: "R Programming"
+subtitle: "An introduction to statistical programming"
+author: | 
+  | Brad Boehmke, Ph.D.
+output: 
+  ioslides_presentation:
+    logo: images/uc_logo2.png
+    widescreen: true
+    smaller: true
+    transition: 0.01
+---
+
+# Introduction 
+
+## <a href="http://bradleyboehmke.github.io/"> <img src="images/me.png"> </a>
+### About Me
+
+
+- U.S. Air Force - Operations Research Analyst
+- Air Force Institute of Technology - Assistant Professor
+- University of Cincinnati - Adjunct Assistant Professor
+- Website: <a href="http://bradleyboehmke.github.io">bradleyboehmke.github.io</a>
+- Twitter: <a href="https://twitter.com/bradleyboehmke">@bradleyboehmke</a>
+- Code: <a href="https://github.com/bradleyboehmke">GitHub</a>
+
+## Short Course Information
+
+<div class="columns-2">
+### Instructor
+
+- Me
+
+### TA
+
+   - TBD
+   - TBD
+
+### Website
+
+   - Companion website: <a href="http://uc-r.github.io/">uc-r.github.io</a>
+   - Slides: <a href="http://uc-r.github.io/r_bootcamp">uc-r.github.io/r_bootcamp</a>
+
+
+### What are we doing?
+- Day 1: R Programming literacy
+- Day 2: Data visualization
+
+### Requirements
+- Computer
+- R
+- IDE (i.e. RStudio)
+- Internet (not absolute)
+
+</div>
+
+## Short Course Description & Objectives
+
+<blockquote>
+<font size="5">
+*Provides an intensive, hands-on introduction to the R programming language. Prepares students with the fundamental programming skills required to start your journey to becoming a modern day data analyst.* </font>
+</blockquote>
+
+<br>
+
+<div class="columns-2">
+### Today
+- Getting started with R
+- Importing data into R
+- Understanding data structures
+- Understanding data types
+- Shaping and transforming your data
+- Descriptive statistics
+
+<br>
+
+### Tomorrow
+- Base R graphics
+- ggplot graphics library
+- visualizing distributions
+- visualizing categorical data
+- visualizing 2 variables
+- visualizing time series
+- visualizing 3+ variables
+</div>
+
+
+# Analytics & Programming
+
+## Why Program?
+
+## Why Program?
+
+### Flexibility
+
+- Frees us from point-n-click analysis software
+- Allows us to customize our analyses
+- Allows us to build analytic applications
+
+### Slows us down
+
+- Forces us to think about our analytic processes
+
+### Speeds the analysis up
+
+- Many statistical programming languages now leverage C++ and Java to speed up computation time
+
+### Reproducibility
+
+- Provides reproducibility that spreadsheet analysis cannot
+- Literate statistical programming is on the rise
+
+## Why R?
+
+## Why R? | Built for Analytics!
+<center>
+<img src="images/analytic_process.png" style="width:75%;height:75%;">
+</center>
+
+## Why R? | Built for Analytics!
+<center>
+<img src="images/analytic_process_get.png" style="width:75%;height:75%;">
+</center>
+
+<br><br>
+
+- .csv, .txt, .xls, etc. files
+- web scraping
+- databases: MySQL, Oracle, PostgreSQL, etc.
+- SPSS, Stat, SAS
+
+## Why R? | Built for Analytics!
+<center>
+<img src="images/analytic_process_clean.png" style="width:75%;height:75%;">
+</center>
+
+<br><br>
+
+- easy to create "tidy" data
+- works well with numerics, characters, dates, missing values
+- robust regex capabilities
+
+## Why R? | Built for Analytics!
+<center>
+<img src="images/analytic_process_transform.png" style="width:75%;height:75%;">
+</center>
+
+<br><br>
+
+- joining disparate data sets
+- selecting, filtering, summarizing
+- great "pipe-line" process
+
+## Why R? | Built for Analytics!
+<center>
+<img src="images/analytic_process_visualize.png" style="width:75%;height:75%;">
+</center>
+
+<br><br>
+
+- R is known for its visualization capabilities
+- ggplot
+- interactive plotting - easily leverage D3.js libraries
+
+## Why R? | Built for Analytics!
+<center>
+<img src="images/analytic_process_model.png" style="width:75%;height:75%;">
+</center>
+
+<br><br>
+
+- built for statistical analyses
+- thousands of libraries provide many statistical capabilities
+- easy to build your own algorithms
+
+## Why R? | Built for Analytics!
+<center>
+<img src="images/analytic_process_communicate.png" style="width:75%;height:75%;">
+</center>
+
+<br><br>
+
+- RMarkdown (produce slides, HTML web pages, pdf)
+- Shiny
+- Reproducibility (communicate to your future self!)
+
+## Why R? | Great Community!
+
+<center>
+<img src="images/community.png" style="width:90%;height:90%;">
+</center>
+
+## Why R? | Create Cool Stuff!
+
+<center>
+<img src="images/cool_stuff.png" style="width:90%;height:90%;">
+</center>
+
+# Getting Started
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+*“Programming is like kicking yourself in the face, sooner or later your nose will bleed.”*
+
+- Kyle Woodbury
+
+
+## Installation
+
+### <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/R_logo.svg/724px-R_logo.svg.png" style="width:50px;height:50px;">
+1. Go to [https://cran.r-project.org/](https://cran.r-project.org/)
+2. Click "Download R for Mac/Windows"
+3. Download the appropriate file:
+    - Windows users click Base, and download the installer for the latest R version
+    - Mac users select the file R-3.X.X.pkg that aligns with your OS version
+4. Follow the instructions of the installer.
+
+### <img src="https://upload.wikimedia.org/wikipedia/en/f/f0/RStudio_logo.png" style="width:15%;height:15%;">
+1. Go to RStudio for desktop [https://www.rstudio.com/products/rstudio/download/](https://www.rstudio.com/products/rstudio/download/)
+2. Select the install file for your OS
+3. Follow the instructions of the installer.
+
+**Note:** There are other R IDE's available: [Emacs](https://www.gnu.org/software/emacs/), [Microsoft R Open](http://revolutionanalytics.com/microsoft-r-open), [Notepad++](https://notepad-plus-plus.org/), etc.
+
+## Understanding the Console
+
+<img src="images/RStudio_console.png" style="width:100%;height:100%;">
+
+Thorough [tutorial regarding the RStudio console](http://dss.princeton.edu/training/RStudio101.pdf)
+
+
+## Getting Help
+Numerous help options are available internal and external to R.  Within R, you can get help by:
+```{r, echo=TRUE, eval=FALSE}
+# provides details for specific function
+help(functionname)
+
+# provides same information as help(functionname)
+?functionname
+
+# provides examples for said function
+example(functionname)
+```
+
+External to R:
+
+- `RSiteSearch("key phrase")`: searches for the key phrase in help manuals and archived mailing lists on the [R Project website](http://search.r- project.org/).
+- [**Stack Overflow:**](http://stackoverflow.com/) a searchable Q&A site oriented toward programming issues. 75% of my answers typically come from Stack Overflow.
+- [**Cross Validated:**](http://stats.stackexchange.com/) a searchable Q&A site oriented toward statistical analysis.
+- [**R-seek:**](http://rseek.org) a Google custom search that is focused on R-specific websites
+- [**R-bloggers:**](http://www.r- bloggers.com/) a central hub of content from over 500 bloggers who provide news and tutorials about R.
+
+
+## Set Your Directory
+- Keeping your files organized is critical
+- Get and set your working directory with the following:
+
+```{r, echo=TRUE, collapse=TRUE, eval=FALSE}
+# get your current working directory
+getwd()
+[1] "/Users/bradboehmke/Dropbox/Academia/University of Cincinnati/Intro to R Bootcamp"
+
+# set your working directory
+setwd("/Users/bradboehmke/Dropbox/Academia/University of Cincinnati")
+
+getwd()
+[1] "/Users/bradboehmke/Dropbox/Academia/University of Cincinnati"
+```
+
+
+## Your Turn 
+
+<br>
+
+<center>
+<blockquote>
+<font size="7">
+Set your working directory to the "R-Bootcamp" folder you downloaded for this course.
+</font>
+</blockquote>
+</center>
+
+## R as a Calculator
+
+R can be used as a simple calculator
+```{r, echo=TRUE, collapse=TRUE}
+# Uses PEMBDAS convention for order of operations
+4 + 3 / 10 ^ 2
+4 + (3 / 10 ^ 2)
+(4 + 3) / 10 ^ 2
+
+# large/small numbers will be displayed in scientific notation
+1 / 17 ^ 7
+
+# Undefined caculations result in Inf or NaN
+1 / 0
+Inf - Inf
+```
+
+
+
+## Simple Objects
+
+Assign values to objects (aka variables) with "`<-`"
+
+```{r, echo=TRUE, collapse=TRUE}
+x <- 3                  # assign 3 to x
+x                       # evaluate x
+
+x <- x + 1              # we can increment (build onto) existing objects
+x
+```
+
+Note that there are multiple ways to assign variables but best practice recommends using "`<-`"
+```{r, echo=TRUE, collapse=TRUE}
+x = 3                   # BAD
+x <- 3                  # GOOD
+```
+
+Must be specific:
+```{r, echo=TRUE, collapse=TRUE, eval=FALSE}
+x <- 3
+
+X
+Error: object 'x' not found
+```
+
+```{r, echo=FALSE, eval=TRUE}
+rm(x)
+```
+
+## Your Turn {.flexbox .vcenter}
+
+<div class="centered"> 
+
+<font size="9">
+Economic Order Quantity Model: 
+</font>
+<font size="6">
+$$Q = \sqrt \frac{2DK}{h}$$
+</font>
+</div>
+
+<br>
+
+<font size="9">
+Calculate `Q` where: 
+
+- `D = 1000`
+- `K = 5`
+- `h = 0.25`
+</font>
+<br>
+<br>
+
+<div class="centered"> 
+hint: `sqrt(x)` $= \sqrt x$
+</div>
+
+## Solution
+
+
+```{r, echo=TRUE, collapse=TRUE}
+D <- 1000
+K <- 5
+h <- .25
+
+Q <- sqrt((2 * D * K) / h)
+Q
+```
+
+
+## Workspace Environment
+- You probably have four objects in your global environment (Q, D, K, h)
+- History tab will show your recent code execution
+- You can list and remove objects from your global environment
+
+```{r, echo=TRUE, collapse=TRUE}
+# list all objects
+ls()
+
+# remove defined object from the environment
+rm(D)
+
+# removes everything in the working environment -- use with caution!
+rm(list = ls())
+```
+
+## Vectors | The fundamental object in R
+
+**<u>Vector:</u>** a sequence of data elements of the same basic type
+
+```{r, echo=TRUE, collapse=TRUE}
+# the ":" operator can be used to create sequential vectors
+1:10
+-3:5
+
+# store a vector to variable x
+x <- 1:10
+x
+
+# the "c" operator can be used to combine non-sequential elements
+y <- c(2, 5, -1)
+y
+```
+
+**Note:** We'll discuss vectors more later but for now you need to understand that...
+
+
+## Vectorization
+A key difference between R and many other languages is the idea of <u>vectorization</u>. 
+
+In other languages you might have to run a loop to add two vectors together.
+
+```{r, echo=TRUE, collapse=TRUE}
+# two vectors to add
+x <- c(1, 3, 4) 
+y <- c(1, 2, 4)
+
+# empty vector
+z <- as.vector(NULL)
+
+# `for` loop to add corresponding elements in each vector
+for (i in seq_along(x)) {
+        z[i] <- x[i] + y[i]
+        print(z)
+}
+```
+
+## Vectorization
+In R, many arithmetic functions such as `+`, `-`, `*`, etc. are vectorized functions that can operate on entire vectors at once by applying underlying C code.
+
+Significantly reduces the need for creating `for` loops
+
+```{r, echo=TRUE, collapse=TRUE}
+x + y
+x * y
+x > y
+```
+
+Beware of <u>recycling</u>
+```{r, echo=TRUE, collapse=TRUE}
+long <- 1:10
+short <- 1:5
+
+long
+short
+
+long + short
+```
+
+## Your Turn
+
+<div class="centered"> 
+
+<font size="7">
+Back to our EOQ Model: $Q = \sqrt \frac{2DK}{h}$
+</font>
+</div>
+
+<br>
+
+<font size="7">
+Calculate `Q` where: 
+</font>
+
+- <font size="6">`D = 1000`</font>
+- <font size="6">`K = 5`</font>
+- <font size="6">`h =` vector of values `0.25, 0.50, 0.75`</font>
+
+
+<br>
+<br>
+
+<center>
+<font size="5">
+hint: `sqrt(x)` $= \sqrt x$
+
+hint 2: The `c()` may be handy here
+</font>
+</center>
+
+
+## Solution
+
+
+```{r, echo=TRUE, collapse=TRUE}
+D <- 1000
+K <- 5
+h <- c(.25, .50, .75)
+
+Q <- sqrt((2 * D * K) / h)
+Q
+```
+
+
+
+## Working with Packages
+The fundamental unit of shareable code is the <u>package</u>.
+
+- [CRAN](https://cran.r-project.org): 8000+
+- [Bioconductor](https://www.bioconductor.org): 1000+
+- [GitHub](https://github.com): Many more plus beta versions for updated packages not yet published
+
+<br>
+
+So how do we install these packages?
+```{r, echo=TRUE, eval=FALSE}
+# install packages from CRAN
+install.packages("packagename")
+
+# install packages from Bioconductor
+source("http://bioconductor.org/biocLite.R")            # only required the first time
+biocLite()                                              # only required the first time
+biocLite("packagename")
+
+# install packages from GitHub
+install.packages("devtools")                            # only required the first time
+devtools::install_github("username/packagename")
+```
+
+## Your Turn
+
+<font size="8">
+Download these packages from CRAN:
+</font>
+
+```{r, echo=TRUE, eval=FALSE}
+dplyr
+tidyr
+ggplot2
+stringr
+lubridate
+```
+
+
+## Solution
+
+```{r, echo=TRUE, eval=FALSE}
+install.packages("dplyr")
+install.packages("tidyr")
+install.packages("ggplot2")
+install.packages("stringr")
+install.packages("lubridate")
+
+# alternative
+install.packages(c("dplyr", "tidyr", "ggplot2", "stringr", "lubridate"))
+```
+
+For a full list of useful packages see this [guide](https://support.rstudio.com/hc/en- us/articles/201057987- Quick- list- of- useful- R- packages)
+
+
+## Using Packages
+### Loading packages
+Once the package is downloaded to your computer you can access the functions and resources provided by the package in two different ways:
+
+```{r, echo=TRUE, eval=FALSE}
+# load the package to use in the current R session
+library(packagename)
+
+# use a particular function within a package without loading the package
+packagename::functionname
+```
+
+### Getting help on packages
+```{r, echo=TRUE, eval=FALSE}
+# provides details regarding contents of a package
+help(package = "packagename")
+
+# list vignettes available for a specific package
+vignette(package = "packagename") 
+
+# view specific vignette
+vignette("vignettename")
+```
+
+## Key Takeaways
+
+Operator/Function       Description             Operator/Function       Description
+-----------------       ----------------        -----------------       ---------------- 
+`help()`                get help                `ls()`                  list objects in working session
+`?`                     get help                `rm()`                  remove objects in current session
+`getwd()`               get working directory   `:`, `c()`              create vector
+`setwd()`               set working directory   `install.packages()`    install package from CRAN
+`+, -, *, /, ^`         arithmetic              `library()`             load package
+`<-`                    assignment              `vignette()`            view/list package vignette
+-----------------       ----------------        -----------------       ----------------
+
+## Break {.flexbox .vcenter}
+
+<div class="centered">
+
+<font size="10">5 minutes!</font>
+
+</div>
+
+
+
+
+

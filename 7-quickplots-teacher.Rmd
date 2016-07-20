@@ -1,0 +1,315 @@
+---
+title: "R Programming"
+subtitle: "Getting started with charts in R"
+author: | 
+  | Brad Boehmke, Ph.D.
+output: 
+  ioslides_presentation:
+    logo: images/uc_logo2.png
+    widescreen: true
+    smaller: true
+    transition: 0.01
+---
+
+
+# Key Things to Remember
+
+## Not all charts need to be pretty!
+
+<br>
+<br>
+
+<center>
+<img src="images/quickplots_icon2.png" width="60%" height="60%"/>
+</center>
+
+## What to Remember from this Section
+
+<font size="6">
+Exploratory data analysis plotting should be quick and simple
+</font>
+
+<br>
+
+Visualization Dimension         Visualization           Function             
+----------                      -------------           ---------       
+Univariate                      Histogram               `hist()`
+                                Bar chart               `barplot()`
+                                Box plot                `boxplot()`
+                                Stem & leaf             `stem()`
+Bivariate                       Scatter plot            `plot()`
+                                Line chart              `plot()`
+                                Box plot                `boxplot()`
+----------                      -------------           ---------
+
+
+# Univariate Visualizations
+
+## Histogram
+
+<center>
+<img src="images/histogram_explanation.png" width="60%" height="60%"/>
+</center>
+
+## Histogram
+
+```{r, eval=FALSE}
+hist(mtcars$mpg)
+
+hist(mtcars$mpg, breaks = 10)
+```
+
+```{r, echo=FALSE, fig.align='center', message=FALSE, fig.height=4, fig.width=10}
+par(mfrow = c(1, 2))
+
+hist(mtcars$mpg)
+hist(mtcars$mpg, breaks = 10)
+```
+
+
+## Bar Chart
+
+<center>
+<img src="images/barchart_explanation.png" width="60%" height="60%"/>
+</center>
+
+## Bar Chart
+
+```{r, collapse=TRUE, fig.align='center', fig.height=3, fig.width=5}
+mtcars$cyl
+
+table(mtcars$cyl)
+
+barplot(table(mtcars$cyl))
+```
+
+
+## Box Plot
+
+<center>
+PLOT HERE!
+</center>
+
+## Box Plot
+
+```{r, eval=FALSE}
+boxplot(mtcars$mpg)
+boxplot(mtcars$mpg, horizontal = TRUE)
+```
+
+```{r, echo=FALSE, fig.align='center', message=FALSE, fig.height=4, fig.width=10}
+par(mfrow = c(1, 2))
+
+boxplot(mtcars$mpg)
+boxplot(mtcars$mpg, horizontal = TRUE)
+```
+
+## Stem & Leaf Plot
+
+<center>
+PLOT HERE!
+</center>
+
+## Stem & Leaf Plot
+
+```{r}
+stem(mtcars$mpg)
+```
+
+## Your Turn
+
+<br>
+
+<font size="6">
+Import the `facebook.tsv` file in the data folder
+</font>
+
+<br>
+
+<blockquote>
+<font size="6">
+1. Assess the distribution of age with a histogram. What does this tell you?
+</font>
+</blockquote>
+
+<br>
+
+<blockquote>
+<font size="6">
+2. Assess the distribution of age with a boxplot. What does this tell you?
+</font>
+</blockquote>
+
+<br>
+
+<blockquote>
+<font size="6">
+3. Assess the frequency of each gender. What does this tell you?
+</font>
+</blockquote>
+
+## Solution
+
+```{r, eval=FALSE}
+# Import the `facebook.tsv` file in the data folder
+facebook <- read.delim("data/facebook.tsv")
+
+# Assess the distribution of age with a histogram
+hist(facebook$age)
+hist(facebook$age, breaks = 100)
+
+# Assess the distribution of age with a boxplot
+boxplot(facebook$age)
+boxplot(facebook$age, horizontal = TRUE)
+
+# Assess the frequency of each gender
+table(facebook$gender)
+barplot(table(facebook$gender))
+```
+
+
+# Bivariate Visualizations
+
+## Scatter Plot
+
+<center>
+PLOT HERE!
+</center>
+
+## Scatter Plot
+
+```{r, eval=FALSE}
+plot(x = mtcars$wt, y = mtcars$mpg)
+plot(x = mtcars$wt, y = mtcars$mpg, pch = 18)
+plot(x = mtcars$wt, y = mtcars$mpg, pch = 16, col = "blue")
+```
+
+```{r, echo=FALSE, fig.align='center', message=FALSE, fig.height=4, fig.width=10}
+par(mfrow = c(1, 3))
+plot(x = mtcars$wt, y = mtcars$mpg)
+plot(x = mtcars$wt, y = mtcars$mpg, pch = 18)
+plot(x = mtcars$wt, y = mtcars$mpg, pch = 16, col = "blue")
+```
+
+## Scatter Plot Matrix
+
+```{r, fig.align='center', fig.height=5, fig.width=9}
+plot(mtcars[, c("mpg", "hp", "disp", "wt")])
+```
+
+## Line Chart
+
+<center>
+PLOT HERE!
+</center>
+
+## Line Chart
+
+```{r, eval=FALSE}
+plot(x = pressure$temperature, y = pressure$pressure, type = "l")
+plot(x = pressure$temperature, y = pressure$pressure, type = "b")
+plot(x = pressure$temperature, y = pressure$pressure, type = "s")
+```
+
+```{r, echo=FALSE, fig.align='center', message=FALSE, fig.height=4, fig.width=10}
+par(mfrow = c(1, 3))
+plot(x = pressure$temperature, y = pressure$pressure, type = "l")
+plot(x = pressure$temperature, y = pressure$pressure, type = "b")
+plot(x = pressure$temperature, y = pressure$pressure, type = "s")
+```
+
+## Line Chart
+
+```{r, fig.align='center', fig.height=4, fig.width=5}
+plot(x = pressure$temperature, y = pressure$pressure, type = "l")       # initial plot
+points(x = pressure$temperature, y = pressure$pressure)                 # add points
+lines(x = pressure$temperature, y = pressure$pressure/2, col = "red")   # add second line
+points(x = pressure$temperature, y = pressure$pressure/2, col = "red")  # add points to second line
+```
+
+
+
+## Box Plot
+
+<center>
+PLOT HERE!
+</center>
+
+## Box Plot
+
+```{r, eval=FALSE}
+boxplot(mtcars$mpg)
+boxplot(mpg ~ cyl, data = mtcars)
+boxplot(mpg ~ cyl + am, data = mtcars)
+```
+
+```{r, echo=FALSE, fig.align='center', message=FALSE, fig.height=4, fig.width=10}
+par(mfrow = c(1, 3))
+
+boxplot(mtcars$mpg)
+boxplot(mpg ~ cyl, data = mtcars)
+boxplot(mpg ~ cyl + am, data = mtcars)
+```
+
+
+## Your Turn
+
+<br>
+
+<font size="6">
+Continuing with the `facebook.tsv` data...
+</font>
+
+<br>
+
+<blockquote>
+<font size="6">
+1. Plot age and friend count. What does this tell you?
+</font>
+</blockquote>
+
+<br>
+
+<blockquote>
+<font size="6">
+2. Assess the distribution of age by gender. What does this tell you?
+</font>
+</blockquote>
+
+<br>
+
+## Solution
+
+```{r, eval=FALSE}
+# Plot age and friend count
+plot(facebook$age, facebook$friend_count)
+
+# Assess the distribution of age by gender
+boxplot(age ~ gender, data = facebook, horizontal = TRUE)
+```
+
+
+
+# Key Things to Remember
+
+## Remember These Functions!
+
+Visualization           Function             
+-------------           ---------       
+Histogram               `hist()`
+Bar chart               `barplot()`
+Box plot                `boxplot()`
+Stem & leaf             `stem()`
+Scatter plot            `plot()`
+Line chart              `plot()`
+Box plot                `boxplot()`
+-------------           ---------
+
+
+## Break {.flexbox .vcenter}
+
+<div class="centered">
+
+<font size="10">5 minutes!</font>
+
+</div>

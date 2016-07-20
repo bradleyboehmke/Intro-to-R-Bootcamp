@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# Session 7: Quick plotting with base R\n\n\n# Bar chart Your Turn\npar(mar = c(5,15,1,1), las = 2)\n\ned <- table(reddit$education)\nbarplot(ed, horiz = TRUE)\n\n",
+    "created" : 1469048776095.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "3914580121",
+    "id" : "7616AA53",
+    "lastKnownWriteTime" : 4294967302,
+    "last_content_update" : 1469048958988,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled2"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

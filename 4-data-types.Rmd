@@ -1,0 +1,579 @@
+---
+title: "R Programming"
+subtitle: "Wait, there are different types of data?"
+author: | 
+  | Brad Boehmke, Ph.D.
+output: 
+  ioslides_presentation:
+    logo: images/uc_logo2.png
+    widescreen: true
+    smaller: true
+    transition: 0.01
+---
+
+
+# Key Things to Remember
+
+## What to Remember from this Section
+
+- R has the ability to work with a variety of data *types*
+- As an analyst, you should become familiar with dealing with the following types of data:
+
+Data Type                       Description             
+-----------------------         ----------------  
+- Numbers                       integer (i.e. 1,2,3...), double (i.e. 1.5, 3.66)         
+- Character Strings             "r", "I attend UC", etc.
+- Regular expressions           patterns within text strings
+- Factors                       nominal (male, female), ordinal (freshman, sophmore, junior), interval ($0-25, $26-50, $51-75)
+- Dates                         calendar dates (i.e. 2016-08-06, 08/06/2016), weekdays, hours, etc.
+- Logical                       `TRUE`, `FALSE`, `any`, `all`
+-----------------------         ---------------- 
+
+# Numbers
+
+## Numbers: two types of numbers
+
+Numeric data pimarily comes in two forms: integer & double (double precision floating point)
+
+```{r, collapse=TRUE}
+# create a string of double-precision values
+dbl_var <- c(1, 2.5, 4.5)  
+class(dbl_var)
+
+# placing an L after the values creates a string of integers
+int_var <- c(1L, 6L, 10L)
+class(int_var)
+```
+
+We can coerce integers to doubles and vice versa with `as.double()` and `as.integer()`
+
+```{r, collapse=TRUE}
+as.integer(dbl_var)
+
+int_to_dbl <- as.double(int_var)
+class(int_to_dbl)
+
+# Combining double and integer will automatically coerce to the simplest form (double)
+c(dbl_var, int_var)
+```
+
+## Numbers: comparing numbers
+
+You've already seen logical operators using `==, !=, <, <=, >, >=`
+
+```{r, collapse=TRUE}
+x <- c(4, 4, 9, 12)
+y <- c(4, 4, 9, 12.00000008)
+
+x == y
+```
+
+Can also test for **exact equality** with `identical()` and **near equality** with `all.equal()`
+
+```{r, collapse=TRUE}
+z <- c(4, 4, 9, 12)
+
+identical(x, y)
+identical(x, z)
+
+all.equal(x, y)
+```
+
+
+## Numbers: rounding
+
+We can also round numbers multiple ways:
+
+```{r, collapse=TRUE}
+x <- c(1, 1.35, 1.7, 2.05, 2.4, 2.75)
+
+# round to the nearest integer
+round(x)
+
+# round up
+ceiling(x)
+
+# round down
+floor(x)
+
+# round to a specified decimal
+round(x, digits = 1)
+```
+
+## Your Turn
+
+<font size="6">
+Import the `numbers-your-turn.csv` file in the data folder
+</font>
+
+<br><br><br><br><br>
+
+<font size="6">1. Are the vectors `x` & `y` equal? Exactly or approximately equal?</font><br><br>
+<font size="6">2. Are the vectors `y` & `z` equal? Exactly or approximately equal?</font><br><br>
+<font size="6">3. Round `x` & `y` numbers to the 4th digit</font><br><br>
+<font size="6">4. Are these vectors equal now?</font>
+
+## Solution
+
+```{r, collapse=TRUE}
+# import the numbers-your-turn.csv file in the data folder
+df <- read.csv("data/numbers-your-turn.csv")
+
+# 1. Are the vectors x & y equal? Exactly or approximately equal?
+identical(df$x, df$y)
+
+all.equal(df$x, df$y)
+
+# 2. Are the vectors x & z equal? Exactly or approximately equal?
+identical(df$y, df$z)
+
+all.equal(df$y, df$z)
+
+# 3. Round x & y numbers to the 4th digit
+x <- round(df$x, digits = 4)
+y <- round(df$y, digits = 4)
+
+# 4. Are these vectors equal now?
+identical(x, y)
+
+all.equal(x, y)
+```
+
+
+# Characters | "Hello world!"
+
+## Characters: creating simple character strings
+
+Create character strings using `""`
+
+```{r, collapse=TRUE}
+a <- "learning to create"
+b <- "character strings"
+```
+
+Combine character strings with `c`, `paste()` or `paste0`
+
+```{r, collapse=TRUE}
+# create a vector containing two elements - a and b
+c(a, b)
+
+# create a vector containing one element - a and b combined
+paste(a, b)
+
+# paste multiple strings
+paste("I", "love", "R")
+
+# change the separator
+paste("I", "love", "R", sep = "-")
+
+# collapse space between characters
+paste0("I", "love", "R")
+```
+
+
+## Characters: test, conversion & coercion
+
+Use `class()`, `mode()` and/or `is.character()` to assess the data type
+
+```{r, collapse=TRUE}
+a <- "Life of"
+b <- pi
+
+class(a)
+
+mode(a)
+
+is.character(pi)
+```
+
+Use `as.character()` to convert non-character to a character
+
+```{r, collapse=TRUE}
+as.character(pi)
+```
+
+Combining characters and non-characters will coerce all inputs to a character
+
+```{r, collapse=TRUE}
+c(a, b)
+```
+
+## Characters: summarizing
+
+Use `length()` to count the number of elements (individual character strings) in a vector
+
+```{r, collapse=TRUE}
+length("How many elements are in this string?")
+
+length(c("How", "many", "elements", "are", "in", "this", "string?"))
+```
+
+<br>
+
+Use `nchar()` to count the number of characters in each element
+
+```{r, collapse=TRUE}
+nchar("How many characters are in this string?")
+
+nchar(c("How", "many", "characters", "are", "in", "this", "string?"))
+```
+
+## Characters: manipulation
+
+<center>
+<blockquote>
+<font size="6">
+Characters are becoming a key form of data which organizations are increasingly leveraging for business analytics
+</font>
+</blockquote>
+</center>
+
+<br>
+
+- Character manipulation (regex and text analysis) is a rich field; far more complex than we have time for
+- More opportunities to learn
+    - [Data Wrangling with R](http://uc-r.github.io/bana_datawrangling) class 
+    - [Dealing with Characters](http://uc-r.github.io/characters) tutorial
+    - [Dealing with Regular Expressions](http://uc-r.github.io/regex) tutorial
+
+
+# Factors | aka categorical variables
+
+## Factors: different from characters
+
+Key Words : **finite options** and **levels**
+
+- nominal variables
+    - male, female
+    - brunnette, blonde, red, black
+    - Hispanic, Caucasion, Asian, African
+- ordinal variables
+    - slow, medium, fast
+    - freshman, sophomore, junior, senior
+- interval variables
+    - $1-100, $101-200, $201-300
+    - 0-10, 11-20, 21-30
+
+## Factors: creating nominal factors
+
+Create nominal factors with `factor()`
+
+```{r, collapse=TRUE}
+gender <- c("male", "female", "female")
+
+class(gender)
+
+gender2 <- factor(gender)
+
+class(gender2)
+
+gender2
+```
+
+set level preferences with `level` argument
+
+```{r, collapse=TRUE}
+factor(gender, levels = c("male", "female"))
+```
+
+
+## Factors: creating ordered factors
+
+Create ordinal/interval factors with `ordered()`; set level preferences with `level` argument
+
+```{r, collapse=TRUE}
+age.range <- c("18-24", "25-34", "35-44", "45-54", "55-64", "65 or Above", "Under 18")
+
+class(age.range)
+
+# turn x into an ordered factor - levels default to the order of the data
+age.range2 <- ordered(age.range)
+
+class(age.range2)
+
+age.range2
+```
+
+set level preferences with `level` argument
+
+```{r, collapse=TRUE}
+ordered(age.range, levels = c("Under 18", "18-24", "25-34", "35-44", "45-54", "55-64", "65 or Above"))
+```
+
+## Factors: summarizing
+
+If you want to know the levels that exist in your factor variable use `levels()`
+
+```{r, collapse=TRUE}
+facebook <- read.delim("data/facebook.tsv")
+
+levels(facebook$gender)
+```
+
+<br>
+
+We can use the `table()` function to quickly assess the counts of each level
+
+```{r, collapse=TRUE}
+table(facebook$gender)
+```
+
+## Your Turn
+
+<font size="6">
+Import the `reddit.csv` file in the data folder
+</font>
+
+<br><br><br>
+
+<font size="6">1. What are the levels for the `income.range` variable?</font><br><br><br>
+<font size="6">2. Properly order the levels for `income.range`.</font><br><br><br>
+<font size="6">3. What are the counts for each level?</font>
+
+
+## Solution
+
+```{r, collapse=TRUE}
+# import the reddit.csv file in the data folder
+reddit <- read.csv("data/reddit.csv")
+
+# 1. What are the levels for the `income.range` variable?
+levels(reddit$income.range)
+
+# 2. Properly order the levels for income.range.
+reddit$income.range <- ordered(reddit$income.range, 
+                               levels = c("Under $20,000", "$20,000 - $29,999", "$30,000 - $39,999",
+                                          "$40,000 - $49,999", "$50,000 - $69,999", "$70,000 - $99,999",
+                                          "$100,000 - $149,999", "$150,000 or more"))
+
+# 3. What are the counts for each level?
+table(reddit$income.range)
+```
+
+
+# Dates | The neglected variable
+
+## Dates: creating
+
+- The `lubridate` package makes working with dates extremely easy
+- To create a date variable we simply need to know the year-month-day order
+
+Function                        Order of elements in date-time            
+-----------------------         -------------------------------  
+`ymd()`                         year, month, day
+`ydm()`                         year, day, month
+`mdy()`                         month, day, year
+`dmy()`                         day, month, year
+`hm()`                          hour, minute
+`hms()`                         hour, minute, second
+`ymd_hms()`                     year, month, day, hour, minute, second
+-----------------------         ------------------------------- 
+
+
+## Dates: creating
+
+- The `lubridate` package makes working with dates extremely easy
+- To create a date variable we simply need to know the year-month-day order
+
+```{r, collapse=TRUE, warning=FALSE, message=FALSE}
+dates <- c("2015-07-01", "2015-08-01", "2015-09-01")
+
+class(dates)
+```
+
+Convert this character string to date format with `lubridate`'s `ymd()` function
+
+```{r, collapse=TRUE, warning=FALSE, message=FALSE}
+# install.packages("lubridate") # run this line if you have not yet installed lubridate
+library(lubridate)
+
+dates2 <- ymd(dates)
+
+class(dates2)
+
+dates2
+```
+
+
+## Dates: create by merging
+
+- Sometimes your date data are collected in separate elements 
+- To convert these separate data into one date object incorporate the `ISOdate()` function:
+
+```{r, collapse=TRUE}
+yr <- c("2012", "2013", "2014", "2015") 
+mo <- c("1", "5", "7", "2")
+day <- c("02", "22", "15", "28")
+
+# ISOdate converts to a POSIXct object
+full_date <- ISOdate(year = yr, month = mo, day = day)
+full_date
+```
+
+<br>
+
+We can truncate the unused time data by converting with `as.Date()`
+```{r, collapse=TRUE}
+as.Date(full_date)
+```
+
+## Dates: extract & manipulate
+
+We can also easily extract components of dates using `lubridate`
+
+Function        Date-time element to extract            
+------------    -------------------------------  
+`year()`        Year        
+`month()`       Month       
+`week()`        Week        
+`yday()`        Day of year       
+`mday()`        Day of month   
+`wday()`        Day of week    
+`hour()`        Hour  
+`minute()`      Minute
+`second()`      Second
+`tz()`          Time zone
+------------    ------------------------------- 
+
+## Dates: extract & manipulate
+
+We can also easily extract components of dates using `lubridate`
+
+Extract time components:
+
+```{r, collapse=TRUE}
+year(full_date)
+
+week(full_date)
+
+wday(full_date, label = TRUE)
+```
+
+
+Manipulate or change date-time components by using the function and then assignment
+
+```{r, collapse=TRUE}
+as.Date(full_date)
+
+year(full_date) <- c(2014, 2015, 2015, 2016)
+
+as.Date(full_date)
+```
+
+
+## Dates: summarizing
+
+- We can also do regular statistical summaries of date objects
+- Illustrate with the `lakers` data set that comes with the `lubridate` package
+
+```{r, collapse=TRUE}
+dates <- ymd(lakers$date)
+
+min(dates)
+
+max(dates)
+
+mean(dates)
+
+median(dates)
+
+summary(dates)
+```
+
+
+## Your Turn
+
+<font size="6">
+Import the `facebook.tsv` file in the data folder
+</font>
+
+<br><br><br>
+
+<font size="6">
+1. Create a new date variable that combines the `dob_day`,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`dob_month`, & `dob_year` variables.
+</font><br><br><br>
+<font size="6">
+2. What is the `min`, `max`, `mean`, and `median` date of births in<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this data frame?
+</font><br><br><br><br><br>
+
+**NOTE:** If you save the new variable as `facebook$dob <- _____________` it will add this new variable to the facebook data frame
+
+## Solution
+
+```{r, collapse=TRUE}
+# Import the `facebook.tsv` file in the data folder
+facebook <- read.delim("data/facebook.tsv")
+
+# 1. Create a new date variable that combines the dob_day, dob_month, & dob_year variables.
+facebook$dob <- as.Date(ISOdate(year = facebook$dob_year, 
+                                month = facebook$dob_month, 
+                                day = facebook$dob_day))
+
+# 2. What is the min, max, mean, and median date of births in this data frame?
+summary(facebook$dob)
+```
+
+
+# Logical | Boolean as in George Boole
+
+## Logical: the basics
+
+We already saw how we can get `TRUE`/`FALSE` responses from comparing elements
+```{r, collapse=TRUE}
+x <- c(4, 4, 9, 12, 2, 2, 10)
+y <- c(4, 5, 9, 13, 2, 1, 10)
+
+x == y
+```
+
+This is just vector containing logical elements
+```{r, collapse=TRUE}
+z <- x == y
+
+class(z)
+```
+
+We can assess if any or all the elements are `TRUE`
+```{r, collapse=TRUE}
+any(z)
+
+all(z)
+```
+
+
+# Key Things to Remember
+
+## Remember These Functions!
+
+Operator/Function                       Description             
+-----------------------------           ----------------      
+`as.double()`, `as.integer()`           coerce to double floating point or integer numbers
+`identical()`, `all.equal()`            test for exact and near equality
+`round()`, `ceiling()`, `floor()`       round numbers
+`c()`, `paste()`, `paste0()`            combine character strings
+`as.character()`                        coerce non-character to a character
+`nchar()`                               count the number of characters in each element
+`factor()`, `ordered()`                 create or coerce to factor variables
+`levels()`                              assess the levels of a factor
+`table()`                               get the counts of each level
+-----------------------------           ----------------     
+
+## Remember These Functions!
+
+Operator/Function               Description             
+----------------------------    ----------------      
+`ymd()`, `mdy()`, `hm()`, etc   `lubridate`: create or convert to date-time variable
+`Isodate()`                     create date variable by mergine separate date components
+`as.Date()`                     truncate date-time variable to just date variable
+`year()`, `week()`, etc         `lubridate`: extract individual date components
+`any()`, `all()`                assess if any or all elements are `TRUE`
+----------------------------    ----------------   
+
+## Break {.flexbox .vcenter}
+
+<div class="centered">
+
+<font size="10">5 minutes!</font>
+
+</div>
+
