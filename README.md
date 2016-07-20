@@ -1,0 +1,6 @@
+# Intro to R Bootcamp
+July 20, 2016  
+
+GitHub repository for developing class material for Intro to R Bootcamp; a short course in the Department of Business Analytics at the University of Cincinnati. The final course material accessible to the students are stored in the [UC-R GitHub repository](https://github.com/uc-r/uc-r.github.io/tree/master/bootcamp). You may use the material according to the [Creative Commons Share-Alike 2.0 (CC-SA 2.0)](http://creativecommons.org/licenses/by/2.0/) license. 
+
+You can view the course website here: [http://uc-r.github.io/r_bootcamp](http://uc-r.github.io/r_bootcamp)
