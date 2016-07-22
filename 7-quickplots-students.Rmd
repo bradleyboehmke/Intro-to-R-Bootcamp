@@ -31,18 +31,17 @@ Exploratory data analysis plotting should be quick and simple and base R excels 
 </blockquote>
 </font>
 
-<br>
-
-Visualization Dimension         Visualization           Function             
-----------                      -------------           ---------       
-Univariate                      Histogram               `hist()`
-                                Bar chart               `barplot()`
-                                Box plot                `boxplot()`
-                                Stem & leaf             `stem()`
-Bivariate                       Scatter plot            `plot()`
-                                Line chart              `plot()`
-                                Box plot                `boxplot()`
-----------                      -------------           ---------
+Visualization           Function             
+-------------           ---------       
+Strip chart             `stripchart()`
+Histogram               `hist()`
+Density plot            `plot(density())`
+Box plot                `boxplot()`
+Bar chart               `barplot()`
+Dot plot                `dotchart()`
+Scatter plot            `plot()`, `pairs()`
+Line chart              `plot()`
+-------------           ---------
 
 
 ## What to Remember from this Section
@@ -77,74 +76,144 @@ title("Regression of MPG on Weight")
 
 <font size="6">
 <blockquote>
-- You can specify fonts, colors, line styles, axes, reference lines, etc. by specifying [graphical parameters](http://www.statmethods.net/advgraphs/parameters.html)
+You can specify fonts, colors, line styles, axes, reference lines, etc. by specifying [graphical parameters](http://www.statmethods.net/advgraphs/parameters.html)
 </blockquote>
 </font>
 
-<font size="5">
+<br>
+
+<font size="6">
 <blockquote>
-- This allows a wide degree of customization; however...
+This allows a wide degree of customization; however...
 </blockquote>
 </font>
 
-<font size="5">
+<br>
+
+<font size="6">
 <blockquote>
-- I have found that ggplot is an easier syntax for customization needs
+I have found that `ggplot` is an easier syntax for customization needs
 </blockquote>
 </font>
+
+## Data Used...
+
+<font size="6">
+<blockquote>
+Import the following data sets from the data folder
+</blockquote>
+</font>
+
+```{r, eval=FALSE}
+facebook.tsv
+reddit.csv
+race-comparison.csv
+Supermarket Transactions.xlsx
+```
+
+
+
 
 # Univariate Visualizations
 
-## Histogram
+## Continuous Variables: Strip Chart
+
+Useful when sample sizes are small but not when sample size are large
 
 ```{r, eval=FALSE}
-hist(mtcars$mpg)
+stripchart(mtcars$mpg, pch = 16)
+stripchart(facebook$tenure, pch = 16)
+```
 
-hist(mtcars$mpg, breaks = 10, col = "grey")
+```{r, echo=FALSE, cache=TRUE}
+facebook <- read.delim("data/facebook.tsv")
+```
+
+```{r, echo=FALSE, fig.align='center', fig.height=3, fig.width=8, warning=FALSE, message=FALSE}
+par(mfrow = c(2, 1), mar = c(2,1,1,1))
+
+stripchart(mtcars$mpg, pch = 16)
+stripchart(facebook$tenure, pch = 16)
+```
+
+## Continuous Variables: Histogram
+
+```{r, eval=FALSE}
+hist(facebook$tenure)
+
+hist(facebook$tenure, breaks = 100, col = "grey", main = "Facebook User Tenure", xlab = "Tenure (Days)")
 ```
 
 ```{r, echo=FALSE, fig.align='center', message=FALSE, fig.height=4, fig.width=10}
 par(mfrow = c(1, 2))
 
-hist(mtcars$mpg)
-hist(mtcars$mpg, breaks = 10, col = "grey")
+hist(facebook$tenure)
+
+hist(facebook$tenure, breaks = 100, col = "grey", main = "Facebook User Tenure", xlab = "Tenure (Days)")
 ```
 
-## Histogram
+## Continuous Variables: Histogram
 A perfect example of why customization with base R is not always enjoyable; in ggplot this is far simpler
 
-```{r, fig.align='center', fig.height=3, fig.width=4}
-x <- mtcars$mpg 
+```{r, fig.align='center', fig.height=3, fig.width=5}
+x <- na.omit(facebook$tenure)
 
 # histogram
-h<-hist(x, breaks = 10, col = "red", xlab = "Miles Per Gallon") 
+h<-hist(x, breaks = 100, col = "grey", main = "Facebook User Tenure", xlab = "Tenure (Days)") 
 
 # add a normal curve
-xfit<-seq(min(x), max(x), length = 40) 
-yfit<-dnorm(xfit, mean = mean(x), sd = sd(x)) 
+xfit <- seq(min(x), max(x), length = 40) 
+yfit <- dnorm(xfit, mean = mean(x), sd = sd(x)) 
 yfit <- yfit * diff(h$mids[1:2]) * length(x) 
-lines(xfit, yfit, col = "blue", lwd = 2)
+lines(xfit, yfit, col = "red", lwd = 2)
 ```
 
-## Density Plot
+## Continuous Variables: Density Plot
 Enclose density(x) within plot()
 
 ```{r, eval=FALSE}
 # basic density plot
-plot(density(mtcars$mpg))
+d <- density(facebook$tenure, na.rm = TRUE)
+
+plot(d, main = "Kernel Density of Tenure")
 
 # fill denisty plot by adding polygon()
 polygon(d, col = "red", border = "blue")
 ```
 
 ```{r, echo=FALSE, fig.align='center', message=FALSE, fig.height=4, fig.width=8}
-par(mfrow = c(1, 2))
+par(mfrow = c(1, 2), mar = c(8,3,1,1))
 
-d <- density(mtcars$mpg)
+plot(density(facebook$tenure, na.rm = TRUE), main = "Kernel Density of Tenure")
+plot(density(facebook$tenure, na.rm = TRUE), main = "Kernel Density of Tenure")
+polygon(density(facebook$tenure, na.rm = TRUE), col = "red", border = "blue")
+```
 
-plot(d)
-plot(d, main = "Kernel Density of Miles Per Gallon")
-polygon(d, col = "red", border = "blue")
+## Continuous Variables: Box Plot
+
+The previous methods provide good insights into the shape of the distribution but don't necessarily tell us about specific summary statistics such as:
+
+```{r}
+summary(facebook$tenure)
+```
+
+However, boxplots provide a concise way to illustrate these standard statistics, the shape, and outliers of data:
+
+<center>
+<img src="https://www.leansigmacorporation.com/wp/wp-content/uploads/2015/12/Box-Plot-MTB_01.png" alt="Generic Box Plot" width="500" vspace="20">
+</center>
+
+## Continuous Variables: Box Plot
+
+```{r, eval=FALSE}
+boxplot(facebook$tenure, horizontal = TRUE)
+boxplot(facebook$tenure, horizontal = TRUE, notch = TRUE, col = "grey40")
+```
+
+```{r, echo=FALSE, fig.align='center', message=FALSE, fig.height=5, fig.width=8}
+par(mfrow = c(2, 1), mar = c(3,1,1,1))
+boxplot(facebook$tenure, horizontal = TRUE)
+boxplot(facebook$tenure, horizontal = TRUE, notch = TRUE, col = "grey40")
 ```
 
 ## Your Turn
@@ -152,92 +221,94 @@ polygon(d, col = "red", border = "blue")
 
 <center>
 <font size="6">
-Import the `facebook.tsv` file in the data folder
+Using the `facebook.tsv` data...
 </font>
 
 <br>
 
 <blockquote>
 <font size="6">
-Assess the distribution of age with a histogram. What does this tell you?
+Visually assess the continuous variables. What do you find?
 </font>
 </blockquote>
 </center>
 
 
-## Bar Chart
+## Categorical Variables: Bar Chart
 
-```{r, collapse=TRUE, fig.align='center', fig.height=3, fig.width=4}
-mtcars$cyl
+```{r, collapse=TRUE, fig.align='center', fig.height=4, fig.width=5}
+reddit <- read.csv("data/reddit.csv")
 
-table(mtcars$cyl)
+table(reddit$dog.cat)
 
-barplot(table(mtcars$cyl))
+barplot(table(reddit$dog.cat))
 ```
 
-## Bar Chart
+## Categorical Variables: Bar Chart
 
 ```{r, eval=FALSE}
-counts <- table(mtcars$gear)
+pets <- table(reddit$dog.cat)
 
-barplot(counts, main = "Car Distribution", xlab = "Number of Gears", col = "blue")
+barplot(pets, main = "Reddit User Animal Preferences", col = "cyan")
 
-barplot(counts, main = "Car Distribution", horiz = TRUE, names.arg = c("3 Gears", "4 Gears", "5 Gears"))
+par(las = 1)
+barplot(pets, main = "Reddit User Animal Preferences", horiz = TRUE, names.arg = c("Cats", "Dogs", "Turtles"))
 ```
 
-```{r, echo=FALSE, fig.align='center', message=FALSE, fig.height=4.5, fig.width=8}
+```{r, echo=FALSE, fig.align='center', message=FALSE, fig.height=4.5, fig.width=10}
 par(mfrow = c(1, 2))
 
-counts <- table(mtcars$gear)
+pets <- table(reddit$dog.cat)
 
-barplot(counts, main = "Car Distribution", xlab = "Number of Gears", col = "blue")
+barplot(pets, main = "Reddit User Animal Preferences", col = "cyan")
 
-barplot(counts, main = "Car Distribution", horiz = TRUE, names.arg = c("3 Gears", "4 Gears", "5 Gears"))
+par(las = 1)
+barplot(pets, main = "Reddit User Animal Preferences", horiz = TRUE, names.arg = c("Cats", "Dogs", "Turtles"))
 ```
 
-## Dot Plot
-Provides less noise than bar charts when plotting many categories
+## Categorical Variables: Bar Chart
 
-```{r, eval=FALSE}
-dotchart(mtcars$mpg)
+What if we want to visualize data regarding many categories...
 
-dotchart(mtcars$mpg, labels = row.names(mtcars), cex = .7)
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+
+state <- reddit %>%
+        group_by(state) %>%
+        tally() %>%
+        arrange(n) %>%
+        filter(state != "")
+
+state
 ```
 
-```{r, echo=FALSE, fig.align='center', message=FALSE, fig.width=9, fig.height=5.5}
-par(mfrow = c(1, 2))
+## Categorical Variables: Bar Chart
 
-dotchart(mtcars$mpg)
+Bar charts work but...
 
-dotchart(mtcars$mpg,labels = row.names(mtcars), cex = .7)
+```{r, echo=FALSE, fig.align='center', fig.height=8}
+par(mar = c(3,8,1,1), las = 1)
+barplot(state$n, names.arg = state$state, horiz = TRUE)
 ```
 
-## Dot Plot
-```{r, fig.align='center', message=FALSE, fig.height=6}
-# order the data first to get more understanding
-x <- mtcars[order(mtcars$mpg),]
-dotchart(x$mpg,labels = row.names(mtcars), cex = .7)
+
+
+## Categorical Variables: Dot Plot
+
+dot plots provide less noise
+
+
+```{r, fig.align='center', message=FALSE, fig.width=6, fig.height=8}
+dotchart(state$n,labels = state$state, cex = .7)
 ```
 
-## Box Plot
 
-```{r, eval=FALSE}
-boxplot(mtcars$mpg)
-boxplot(mtcars$mpg, horizontal = TRUE)
-```
-
-```{r, echo=FALSE, fig.align='center', message=FALSE, fig.height=4, fig.width=10}
-par(mfrow = c(1, 2))
-
-boxplot(mtcars$mpg)
-boxplot(mtcars$mpg, horizontal = TRUE)
-```
 
 ## Your Turn
 <br>
 
 <font size="6">
-Import the `reddit.csv` file in the data folder
+Using the `reddit.csv` data...
 </font>
 
 <br>
@@ -256,119 +327,120 @@ Import the `reddit.csv` file in the data folder
 
 <blockquote>
 <font size="6">
-2. Assess the frequency of states. What does this tell you?
+2. Assess how the different cheeses rank with Reddit users. What does this tell you?
 </font>
 </blockquote>
 
 
-## Stem & Leaf Plot
-
-```{r}
-stem(mtcars$mpg)
-```
-
-## Your Turn
-
-<br>
-
-<font size="6">
-Import the `facebook.tsv` file in the data folder
-</font>
-
-<br>
-
-<blockquote>
-<font size="6">
-1. Assess the distribution of age with a histogram. What does this tell you?
-</font>
-</blockquote>
-
-<br>
-
-<blockquote>
-<font size="6">
-2. Assess the distribution of age with a boxplot. What does this tell you?
-</font>
-</blockquote>
-
-<br>
-
-<blockquote>
-<font size="6">
-3. Assess the frequency of each gender. What does this tell you?
-</font>
-</blockquote>
 
 
-# Bivariate Visualizations
 
 
+# Multivariate Visualizations
 
 ## Scatter Plot
 
 ```{r, eval=FALSE}
-plot(x = mtcars$wt, y = mtcars$mpg)
-plot(x = mtcars$wt, y = mtcars$mpg, pch = 18)
-plot(x = mtcars$wt, y = mtcars$mpg, pch = 16, col = "blue")
+plot(x = race$White_unemployment, y = race$Black_unemployment, pch = 16, col = "blue")
+plot(x = race$Black_unemployment, y = race$black_college, pch = 16, col = "blue")
 ```
 
-```{r, echo=FALSE, fig.align='center', message=FALSE, fig.height=4, fig.width=10}
-par(mfrow = c(1, 3))
-plot(x = mtcars$wt, y = mtcars$mpg)
-plot(x = mtcars$wt, y = mtcars$mpg, pch = 18)
-plot(x = mtcars$wt, y = mtcars$mpg, pch = 16, col = "blue")
+
+```{r, echo=FALSE, fig.align='center', fig.height=5, fig.width=10}
+race <- read.csv("data/race-comparison.csv")
+
+par(mfrow = c(1, 2))
+plot(x = race$White_unemployment, y = race$Black_unemployment, pch = 16, col = "blue")
+plot(x = race$Black_unemployment, y = race$black_college, pch = 16, col = "blue")
+```
+
+
+## Scatter Plot
+
+We can fit lines to the data but need to use `~` instead of `x` & `y`
+
+
+```{r, eval=FALSE}
+par(mar = c(5,5,1,1))
+plot(White_unemployment ~ Black_unemployment, data = race)
+abline(lm(White_unemployment ~ Black_unemployment, data = race), col = "red")
+lines(lowess(race$White_unemployment ~ race$Black_unemployment), col = "blue")
+```
+
+```{r, echo=FALSE, fig.align='center', fig.height=4, fig.width=4}
+par(mar = c(5,5,1,1))
+plot(White_unemployment ~ Black_unemployment, data = race)
+abline(lm(White_unemployment ~ Black_unemployment, data = race), col = "red")
+lines(lowess(race$White_unemployment ~ race$Black_unemployment), col = "blue")
 ```
 
 ## Scatter Plot Matrix
 
-```{r, fig.align='center', fig.height=5, fig.width=9}
-plot(mtcars[, c("mpg", "hp", "disp", "wt")])
+We can assess scatter plots for multiple variables at once
+
+```{r, fig.align='center'}
+par(mar = c(2,2,2,2))
+pairs(race)
 ```
 
 
 
 ## Line Chart
 
+
 ```{r, eval=FALSE}
-plot(x = pressure$temperature, y = pressure$pressure, type = "l")
-plot(x = pressure$temperature, y = pressure$pressure, type = "b")
-plot(x = pressure$temperature, y = pressure$pressure, type = "s")
+plot(x = race$Year, y = race$black_college, type = "l")
+plot(x = race$Year, y = race$black_college, type = "s")
+plot(x = race$Year, y = race$Black_unemployment, type = "b")
 ```
 
 ```{r, echo=FALSE, fig.align='center', message=FALSE, fig.height=4, fig.width=10}
 par(mfrow = c(1, 3))
-plot(x = pressure$temperature, y = pressure$pressure, type = "l")
-plot(x = pressure$temperature, y = pressure$pressure, type = "b")
-plot(x = pressure$temperature, y = pressure$pressure, type = "s")
+plot(x = race$Year, y = race$black_college, type = "l")
+plot(x = race$Year, y = race$black_college, type = "s")
+plot(x = race$Year, y = race$Black_unemployment, type = "b")
 ```
 
 ## Line Chart
 
-```{r, fig.align='center', fig.height=4, fig.width=5}
-plot(x = pressure$temperature, y = pressure$pressure, type = "l")       # initial plot
-points(x = pressure$temperature, y = pressure$pressure)                 # add points
-lines(x = pressure$temperature, y = pressure$pressure/2, col = "red")   # add second line
-points(x = pressure$temperature, y = pressure$pressure/2, col = "red")  # add points to second line
+```{r, eval=FALSE}
+plot(x = race$Year, y = race$Black_hs, type = "l", ylim = c(0, max(race$Black_hs)))       # initial plot
+lines(x = race$Year, y = race$black_college, col = "red")  # add points to second line
+lines(x = race$Year, y = race$Black_unemployment, col = "blue", lty = 2)
+legend("topleft", legend = c("HS Rate", "College Rate", "Unemployment"), 
+       col = c("black", "red", "blue"), lty = c(1, 1, 2))
 ```
 
+```{r, fig.align='center', fig.height=4, fig.width=6, echo=FALSE}
+par(mar = c(2,5,1,2))
 
+plot(x = race$Year, y = race$Black_hs, type = "l", ylim = c(0, max(race$Black_hs)))       # initial plot
+lines(x = race$Year, y = race$black_college, col = "red")  # add points to second line
+lines(x = race$Year, y = race$Black_unemployment, col = "blue", lty = 2)
+legend("topleft", legend = c("HS Rate", "College Rate", "Unemployment"), 
+       col = c("black", "red", "blue"), lty = c(1, 1, 2))
+```
 
 
 
 ## Box Plot
 
 ```{r, eval=FALSE}
-boxplot(mtcars$mpg)
-boxplot(mpg ~ cyl, data = mtcars)
-boxplot(mpg ~ cyl + am, data = mtcars)
+library(readxl)
+supermarket <- read_excel("data/Supermarket Transactions.xlsx", sheet = "Data")
+
+boxplot(supermarket$Revenue)
+boxplot(Revenue ~ Gender, data = supermarket)
+boxplot(Revenue ~ Gender + `Marital Status`, data = supermarket)
 ```
 
-```{r, echo=FALSE, fig.align='center', message=FALSE, fig.height=4, fig.width=10}
+```{r, echo=FALSE, fig.align='center', warning=FALSE, message=FALSE, fig.height=4, fig.width=10}
+library(readxl)
+supermarket <- read_excel("data/Supermarket Transactions.xlsx", sheet = "Data")
 par(mfrow = c(1, 3))
-
-boxplot(mtcars$mpg)
-boxplot(mpg ~ cyl, data = mtcars)
-boxplot(mpg ~ cyl + am, data = mtcars)
+boxplot(supermarket$Revenue)
+boxplot(Revenue ~ Gender, data = supermarket)
+boxplot(Revenue ~ Gender + `Marital Status`, data = supermarket)
 ```
 
 
@@ -377,28 +449,69 @@ boxplot(mpg ~ cyl + am, data = mtcars)
 <br>
 
 <font size="6">
-Continuing with the `facebook.tsv` data...
+Using the `supermarket` data analyze revenue by...
 </font>
 
 <br>
 
 <blockquote>
 <font size="6">
-1. Plot age and friend count. What does this tell you?
+- Date <br>
+- Homeownership <br>
+- City <br>
+- Product family/category <br>
+- Etc.
 </font>
 </blockquote>
+
+<br>
+
+<font size="6">
+What do you find?
+</font>
+
+## Bar Chart
+
+Bar chart can help to compare multiple categories
+
+```{r, eval=FALSE}
+counts <- table(supermarket$`Marital Status`, supermarket$Children)
+
+barplot(counts, col = c("darkblue", "red"), legend = c("Married", "Single"))
+barplot(counts, col = c("darkblue", "red"), legend = c("Married", "Single"), beside = TRUE)
+```
+
+```{r, echo=FALSE, fig.align='center', fig.height=4, fig.width=10}
+counts <- table(supermarket$`Marital Status`, supermarket$Children)
+par(mfrow = c(1, 2), mar = c(2,2,2,2))
+barplot(counts, col = c("darkblue", "red"), legend = c("Married", "Single"))
+barplot(counts, col = c("darkblue", "red"), legend = c("Married", "Single"), beside = TRUE)
+```
+
+
+## Your Turn
+<br>
+
+<font size="6">
+Using the `supermarket` data compare counts of...
+</font>
 
 <br>
 
 <blockquote>
 <font size="6">
-2. Assess the distribution of age by gender. What does this tell you?
+- Product Family by Homeownership <br>
+- Annual Income by Homeownership <br>
+- Country by Gender <br>
+- Etc.
 </font>
 </blockquote>
 
 <br>
 
-
+<font size="6">
+What do you find?
+</font>
 
 
 # Key Things to Remember
@@ -407,13 +520,14 @@ Continuing with the `facebook.tsv` data...
 
 Visualization           Function             
 -------------           ---------       
+Strip chart             `stripchart()`
 Histogram               `hist()`
+Density plot            `plot(density())`
+Box plot                `boxplot()`
 Bar chart               `barplot()`
-Box plot                `boxplot()`
-Stem & leaf             `stem()`
-Scatter plot            `plot()`
+Dot plot                `dotchart()`
+Scatter plot            `plot()`, `pairs()`
 Line chart              `plot()`
-Box plot                `boxplot()`
 -------------           ---------
 
 

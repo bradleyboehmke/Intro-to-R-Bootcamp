@@ -7,14 +7,14 @@
     "folds" : "",
     "hash" : "3070502784",
     "id" : "5BCB2CB4",
-    "lastKnownWriteTime" : 1468951285,
-    "last_content_update" : 1468951285340,
+    "lastKnownWriteTime" : 1469212762,
+    "last_content_update" : 1469212762662,
     "path" : "~/Dropbox/Academia/University of Cincinnati/Intro to R Bootcamp/8-ggplot-students.Rmd",
     "project_path" : "8-ggplot-students.Rmd",
     "properties" : {
         "tempName" : "Untitled1"
     },
-    "relative_order" : 2,
+    "relative_order" : 3,
     "source_on_save" : false,
     "source_window" : "",
     "type" : "r_markdown"
