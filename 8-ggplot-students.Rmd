@@ -397,7 +397,7 @@ grid.arrange(p1, p2, p3, ncol = 3)
 
 ## Bar Chart
 
-Bar charts can have additional y-axis rather than just counts
+Bar charts can have a y-axis different than just counts
 
 ```{r, eval=FALSE}
 ggplot(supermarket, aes(x = `Product Family`)) +
@@ -433,7 +433,7 @@ grid.arrange(p1, p2, ncol = 2)
 
 <blockquote>
 <font size="6">
-Assess the relationship between tenure and age, gender, likes, etc. in the `facebook` data.
+Assess bivariate relationships between tenure, age, gender, likes, etc. in the `facebook` data.
 </font>
 </blockquote>
 
@@ -442,13 +442,99 @@ Assess the relationship between tenure and age, gender, likes, etc. in the `face
 
 ## Color, Size, Shape, etc.
 
+```{r, eval=FALSE}
+ggplot(supermarket, aes(Revenue, color = `Product Family`)) +
+        geom_freqpoly()
+
+ggplot(data = supermarket, aes(`Product Family`, fill = Gender)) +
+        geom_bar(position = "dodge")
+
+ggplot(supermarket, aes(`Purchase Date`, Revenue, color = Country)) +
+        geom_point()
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3, warning=FALSE, message=FALSE}
+p1 <- ggplot(supermarket, aes(Revenue, color = `Product Family`)) +
+        geom_freqpoly()
+
+p2 <- ggplot(data = supermarket, aes(`Product Family`, fill = Gender)) +
+        geom_bar(position = "dodge")
+
+p3 <- ggplot(supermarket, aes(`Purchase Date`, Revenue, color = Country)) +
+        geom_point()
+
+grid.arrange(p1, p2, p3, ncol = 3)
+```
+
+## Color, Size, Shape, etc.
+
+```{r, fig.align='center', fig.width=10, fig.height=4, warning=FALSE, message=FALSE}
+prod_revenue <- supermarket %>%
+        group_by(`Purchase Date`, `Product Family`) %>%
+        summarise(Revenue = sum(Revenue, na.rm = TRUE))
+
+ggplot(prod_revenue, aes(`Purchase Date`, Revenue, color = `Product Family`)) +
+        geom_line(alpha = .2) +
+        geom_smooth(se = FALSE, span = .1)
+```
+
+
 ## Facetting
 
+```{r, fig.align='center', fig.width=10, fig.height=4, warning=FALSE, message=FALSE}
+ggplot(prod_revenue, aes(`Purchase Date`, Revenue)) +
+        geom_line(alpha = .2) +
+        geom_smooth(se = FALSE, span = .1) +
+        facet_wrap(~ `Product Family`)
+```
 
+## Facetting
+
+```{r, eval=FALSE}
+ggplot(prod_revenue, aes(`Purchase Date`, Revenue)) +
+        geom_blank() +
+        facet_grid(.~ `Product Family`)
+
+ggplot(prod_revenue, aes(`Purchase Date`, Revenue)) +
+        geom_blank() +
+        facet_grid(`Product Family` ~.)
+```
+
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=4, warning=FALSE, message=FALSE}
+p1 <- ggplot(prod_revenue, aes(`Purchase Date`, Revenue)) +
+        geom_blank() +
+        facet_grid(.~ `Product Family`)
+
+p2 <- ggplot(prod_revenue, aes(`Purchase Date`, Revenue)) +
+        geom_blank() +
+        facet_grid(`Product Family` ~.)
+grid.arrange(p1, p2, ncol = 2)
+```
+
+## Your Turn
+
+<br>
+<br>
+
+<blockquote>
+<font size="6">
+Assess multivariate relationships between tenure, age, gender, likes, etc. in the `facebook` data.
+</font>
+</blockquote>
 
 # Visualization Aesthetics
 
 ## Scales, Axes and Legends
+
+```{r, eval=FALSE}
+ggplot(supermarket, aes(Revenue)) +
+        geom_histogram(bins = 100, color = "grey40", fill = "white") +
+        scale_size_continuous()
+        
+```
+
+
 
 ## Themes
 
