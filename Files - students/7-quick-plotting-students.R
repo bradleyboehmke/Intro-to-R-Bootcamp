@@ -164,7 +164,8 @@ dotchart()
 #############
 # Using the Reddit data... 
 
-# 1) assess the frequency of education levels
+# 1) assess the frequency of education levels (note: preceed your plot function 
+# with par(mar = c(5,15,1,1), las = 2))
 
 
 
