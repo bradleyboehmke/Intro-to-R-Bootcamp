@@ -1,0 +1,766 @@
+---
+title: "R Programming"
+subtitle: "Advanced Graphics with ggplot2"
+author: | 
+  | Brad Boehmke, Ph.D.
+output: 
+  ioslides_presentation:
+    logo: images/uc_logo2.png
+    widescreen: true
+    smaller: true
+    transition: 0.01
+---
+
+
+# Key Things to Remember
+
+## ggplot2 provides unlimited visualization customization
+
+
+<center>
+<img src="images/tufte_weather.png" width="100%" height="100%"/>
+</center>
+
+## What to Remember from this Section
+
+`ggplot2` allows you to:
+
+
+1. Think about your graphics via layers
+2. Apply an organized grammar of graphics for visualization development
+3. ...
+
+<blockquote>
+What you'll see here is just the beginning! See more at [http://docs.ggplot2.org/current/](http://docs.ggplot2.org/current/)
+</blockquote>
+
+## What to Remember from this Section
+
+Syntax for ggplot2 visualizations will look like:
+
+```{r, warning=FALSE, message=FALSE, fig.align='center', fig.height=3.25, fig.width=7}
+library(ggplot2)
+
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+        geom_point(aes(color = class)) +
+        xlab("Engine Displacement (liters)") +
+        ylab("Highway Mileage") +
+        ggtitle("Fuel Economy vs. Engine Displacement") +
+        theme_bw()
+        
+```
+
+
+## Resources Used...
+
+Load these packages to follow along with this tutorial
+
+```{r, eval=TRUE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(readxl)
+library(dplyr)
+```
+
+<br>
+
+Import the following data sets from the data folder
+
+```{r, eval=TRUE}
+supermarket <- read_excel("data/Supermarket Transactions.xlsx", sheet = "Data")
+facebook <- read.delim("data/facebook.tsv")
+reddit <- read.csv("data/reddit.csv")
+race <- read.csv("data/race-comparison.csv")
+```
+
+
+# Fundamentals of ggplot2
+
+## First Layer is, well, boring
+
+```{r, eval=FALSE}
+ggplot(data = supermarket)
+ggplot(data = supermarket, aes(x = `Purchase Date`, y = Revenue))
+```
+
+
+```{r, fig.align='center', echo=FALSE, fig.width=10, fig.height=4, message=FALSE, warning=FALSE}
+library(gridExtra)
+
+p1 <- ggplot(data = supermarket)
+p2 <- ggplot(data = supermarket, aes(x = `Purchase Date`, y = Revenue))
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+## Let's Add Geoms
+
+To display the data we need to tell ggplot what to draw
+
+-----------------       ----------------------------------     
+`geom_histogram()`      histogram
+`geom_freqpoly()`       frequency polygon
+`geom_bar()`            bar chart
+`geom_point()`          scatter plot
+`geom_line()`           line chart
+`geom_boxplot()`        boxplot
+-----------------       ----------------------------------
+
+<br>
+
+Check out all the available geoms at [docs.ggplot2.org/current](docs.ggplot2.org/current)
+
+
+# Univariate Geoms
+
+## Histogram, Frequency Polygons & Density Plots
+
+```{r, eval=FALSE}
+ggplot(data = supermarket, aes(x = Revenue)) +
+        geom_histogram()
+
+ggplot(data = supermarket, aes(x = Revenue)) +
+        geom_freqpoly()
+
+ggplot(data = supermarket, aes(x = Revenue)) +
+        geom_density()
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3, warning=FALSE, message=FALSE}
+p1 <- ggplot(data = supermarket, aes(x = Revenue)) +
+        geom_histogram()
+
+p2 <- ggplot(data = supermarket, aes(x = Revenue)) +
+        geom_freqpoly()
+
+p3 <- ggplot(data = supermarket, aes(x = Revenue)) +
+        geom_density()
+
+grid.arrange(p1, p2, p3, ncol = 3)
+```
+
+## Histogram, Frequency Polygons & Density Plots
+
+```{r, eval=FALSE}
+ggplot(data = supermarket, aes(x = Revenue)) +
+        geom_histogram(bins = 100, color = "grey40", fill = "white")
+
+ggplot(data = supermarket, aes(x = Revenue)) +
+        geom_freqpoly(bins = 100, color = "blue")
+
+ggplot(data = supermarket, aes(x = Revenue)) +
+        geom_density(fill = "red", alpha = .5)
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3, warning=FALSE, message=FALSE}
+p1 <- ggplot(data = supermarket, aes(x = Revenue)) +
+        geom_histogram(bins = 100, color = "grey40", fill = "white")
+
+p2 <- ggplot(data = supermarket, aes(x = Revenue)) +
+        geom_freqpoly(bins = 100, color = "blue")
+
+p3 <- ggplot(data = supermarket, aes(x = Revenue)) +
+        geom_density(fill = "red", alpha = .5)
+
+library(gridExtra)
+grid.arrange(p1, p2, p3, ncol = 3)
+```
+
+
+## Bar Chart
+
+
+```{r, eval=FALSE}
+ggplot(data = supermarket, aes(x = `Product Family`)) +
+        geom_bar()
+
+summary <- supermarket %>%
+        group_by(`Product Family`) %>%
+        tally()
+
+ggplot(data = summary, aes(x = `Product Family`, y = n)) +
+        geom_bar(stat = "identity")
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=8, fig.height=3, warning=FALSE, message=FALSE}
+p1 <- ggplot(data = supermarket, aes(x = `Product Family`)) +
+        geom_bar()
+
+summary <- supermarket %>%
+        group_by(`Product Family`) %>%
+        tally()
+
+p2 <- ggplot(data = summary, aes(x = `Product Family`, y = n)) +
+        geom_bar(stat = "identity")
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+## Bar Chart
+```{r, eval=FALSE}
+ggplot(data = supermarket, aes(x = `Product Family`)) +
+        geom_bar(fill = "dodgerblue", color = "grey40")
+
+ggplot(data = supermarket, aes(x = `Product Family`)) +
+        geom_bar(fill = "dodgerblue", color = "grey40", width = .75)
+
+ggplot(data = supermarket, aes(x = `Product Family`)) +
+        geom_bar(fill = "dodgerblue", color = "grey40", width = .99)
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3, warning=FALSE, message=FALSE}
+p1 <- ggplot(data = supermarket, aes(x = `Product Family`)) +
+        geom_bar(fill = "dodgerblue", color = "grey40")
+
+p2 <- ggplot(data = supermarket, aes(x = `Product Family`)) +
+        geom_bar(fill = "dodgerblue", color = "grey40", width = .75)
+
+p3 <- ggplot(data = supermarket, aes(x = `Product Family`)) +
+        geom_bar(fill = "dodgerblue", color = "grey40", width = .99)
+
+grid.arrange(p1, p2, p3, ncol = 3)
+```
+
+
+## Your Turn
+
+<br>
+<br>
+
+<blockquote>
+<font size="6">
+1. Assess the distribution of age, tenure, and gender in the `facebook` data.
+</font>
+</blockquote>
+
+<br>
+
+<blockquote>
+<font size="6">
+2. Assess the frequency of age range, education, and income range in the `reddit` data. 
+</font>
+</blockquote>
+
+
+# Bivariate Geoms
+
+## Scatter Plots
+
+```{r, eval=FALSE}
+ggplot(supermarket, aes(`Purchase Date`, Revenue)) +
+        geom_point()
+
+ggplot(supermarket, aes(`Purchase Date`, Revenue)) +
+        geom_point(colour = "blue", size = 1, shape = 5)
+
+ggplot(supermarket, aes(`Purchase Date`, Revenue)) +
+        geom_point(colour = "blue", alpha = .25)
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3, warning=FALSE, message=FALSE}
+p1 <- ggplot(supermarket, aes(`Purchase Date`, Revenue)) +
+        geom_point()
+
+p2 <- ggplot(supermarket, aes(`Purchase Date`, Revenue)) +
+        geom_point(colour = "blue", size = .5, shape = 5)
+
+p3 <- ggplot(supermarket, aes(`Purchase Date`, Revenue)) +
+        geom_point(colour = "blue", alpha = .05)
+
+grid.arrange(p1, p2, p3, ncol = 3)
+```
+
+## Scatter Plots: over plotting
+
+```{r, eval=FALSE}
+ggplot(supermarket, aes(factor(`Units Sold`), Revenue)) +
+        geom_point()
+
+ggplot(supermarket, aes(factor(`Units Sold`), Revenue)) +
+        geom_jitter(size = 1)
+
+ggplot(supermarket, aes(factor(`Units Sold`), Revenue)) +
+        geom_jitter(size = 1, alpha = .1)
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3, warning=FALSE, message=FALSE}
+p1 <- ggplot(supermarket, aes(factor(`Units Sold`), Revenue)) +
+        geom_point()
+
+p2 <- ggplot(supermarket, aes(factor(`Units Sold`), Revenue)) +
+        geom_jitter(size = 1)
+
+p3 <- ggplot(supermarket, aes(factor(`Units Sold`), Revenue)) +
+        geom_jitter(size = 1, alpha = .1)
+
+grid.arrange(p1, p2, p3, ncol = 3)
+```
+
+## Line Charts
+
+```{r, eval=FALSE}
+sales_by_date <- supermarket %>%
+        group_by(`Purchase Date`) %>%
+        summarise(Revenue = sum(Revenue, na.rm = TRUE))
+
+ggplot(sales_by_date, aes(`Purchase Date`, Revenue)) +
+        geom_line()
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=4, warning=FALSE, message=FALSE}
+sales_by_date <- supermarket %>%
+        group_by(`Purchase Date`) %>%
+        summarise(Revenue = sum(Revenue, na.rm = TRUE))
+
+ggplot(sales_by_date, aes(`Purchase Date`, Revenue)) +
+        geom_line()
+```
+
+## Line Charts: fitting additional lines
+
+```{r, eval=FALSE}
+sales_plot <- ggplot(sales_by_date, aes(`Purchase Date`, Revenue)) +
+        geom_line()
+
+sales_plot + geom_smooth(span = .1)
+
+sales_plot + geom_smooth(span = .9. se = FALSE)
+
+sales_plot + geom_smooth(method = "lm", se = FALSE)
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=10.5, fig.height=3.5, warning=FALSE, message=FALSE}
+sales_plot <- ggplot(sales_by_date, aes(`Purchase Date`, Revenue)) +
+        geom_line()
+
+p1 <- sales_plot + geom_smooth(span = .1)
+
+p2 <- sales_plot + geom_smooth(span = .9, se = FALSE)
+
+p3 <- sales_plot + geom_smooth(method = "lm", se = FALSE)
+
+grid.arrange(p1, p2, p3, ncol = 3)
+```
+
+## Box Plot
+
+```{r, eval=FALSE}
+ggplot(supermarket, aes(factor(Children), Revenue)) +
+        geom_boxplot()
+
+ggplot(supermarket, aes(factor(Children), Revenue)) +
+        geom_boxplot(notch = TRUE, fill = "blue", alpha = .25)
+
+ggplot(supermarket, aes(factor(Children), Revenue)) +
+        geom_boxplot(outlier.color = "red", outlier.shape = 1)
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3, warning=FALSE, message=FALSE}
+p1 <- ggplot(supermarket, aes(factor(Children), Revenue)) +
+        geom_boxplot()
+
+p2 <- ggplot(supermarket, aes(factor(Children), Revenue)) +
+        geom_boxplot(notch = TRUE)
+
+p3 <- ggplot(supermarket, aes(factor(Children), Revenue)) +
+        geom_boxplot(outlier.color = "red", outlier.shape = 1)
+
+grid.arrange(p1, p2, p3, ncol = 3)
+```
+
+## Box Plot: over plotting
+
+Useful for smaller data sets like `mpg`
+
+```{r, eval=FALSE}
+ggplot(mpg, aes(class, hwy)) +
+        geom_boxplot()
+
+ggplot(mpg, aes(class, hwy)) +
+        geom_boxplot() +
+        geom_jitter(width = .2, alpha = .5)
+
+ggplot(mpg, aes(class, hwy)) +
+        geom_violin()
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3, warning=FALSE, message=FALSE}
+p1 <- ggplot(mpg, aes(class, hwy)) +
+        geom_boxplot()
+
+p2 <- ggplot(mpg, aes(class, hwy)) +
+        geom_boxplot() +
+        geom_jitter(width = .2, alpha = .5)
+
+p3 <- ggplot(mpg, aes(class, hwy)) +
+        geom_violin()
+
+grid.arrange(p1, p2, p3, ncol = 3)
+```
+
+
+## Bar Chart
+
+Bar charts can have a y-axis different than just counts
+
+```{r, eval=FALSE}
+ggplot(supermarket, aes(x = `Product Family`)) +
+        geom_bar()
+
+prod_revenue <- supermarket %>%
+        group_by(`Product Family`) %>%
+        summarise(Revenue = sum(Revenue, na.rm = TRUE))
+
+ggplot(prod_revenue, aes(x = `Product Family`, y = Revenue)) +
+        geom_bar(stat = "identity")
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=8, fig.height=3, warning=FALSE, message=FALSE}
+p1 <- ggplot(data = supermarket, aes(x = `Product Family`)) +
+        geom_bar()
+
+prod_revenue <- supermarket %>%
+        group_by(`Product Family`) %>%
+        summarise(Revenue = sum(Revenue, na.rm = TRUE))
+
+p2 <- ggplot(prod_revenue, aes(x = `Product Family`, y = Revenue)) +
+        geom_bar(stat = "identity")
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+
+## Your Turn
+
+<br>
+<br>
+
+<blockquote>
+<font size="6">
+Assess bivariate relationships between tenure, age, gender, likes, etc. in the `facebook` data.
+</font>
+</blockquote>
+
+
+# Multivariate Capabilities
+
+## Color, Size, Shape, etc.
+
+```{r, eval=FALSE}
+ggplot(supermarket, aes(Revenue, color = `Product Family`)) +
+        geom_freqpoly()
+
+ggplot(data = supermarket, aes(`Product Family`, fill = Gender)) +
+        geom_bar(position = "dodge")
+
+ggplot(supermarket, aes(`Purchase Date`, Revenue, color = Country)) +
+        geom_point()
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3, warning=FALSE, message=FALSE}
+p1 <- ggplot(supermarket, aes(Revenue, color = `Product Family`)) +
+        geom_freqpoly()
+
+p2 <- ggplot(data = supermarket, aes(`Product Family`, fill = Gender)) +
+        geom_bar(position = "dodge")
+
+p3 <- ggplot(supermarket, aes(`Purchase Date`, Revenue, color = Country)) +
+        geom_point()
+
+grid.arrange(p1, p2, p3, ncol = 3)
+```
+
+## Color, Size, Shape, etc.
+
+```{r, fig.align='center', fig.width=10, fig.height=4, warning=FALSE, message=FALSE}
+prod_revenue <- supermarket %>%
+        group_by(`Purchase Date`, `Product Family`) %>%
+        summarise(Revenue = sum(Revenue, na.rm = TRUE))
+
+ggplot(prod_revenue, aes(`Purchase Date`, Revenue, color = `Product Family`)) +
+        geom_line(alpha = .2) +
+        geom_smooth(se = FALSE, span = .1)
+```
+
+
+## Facetting
+
+```{r, fig.align='center', fig.width=10, fig.height=4, warning=FALSE, message=FALSE}
+ggplot(prod_revenue, aes(`Purchase Date`, Revenue)) +
+        geom_line(alpha = .2) +
+        geom_smooth(se = FALSE, span = .1) +
+        facet_wrap(~ `Product Family`)
+```
+
+## Facetting
+
+```{r, eval=FALSE}
+ggplot(prod_revenue, aes(`Purchase Date`, Revenue)) +
+        geom_blank() +
+        facet_grid(.~ `Product Family`)
+
+ggplot(prod_revenue, aes(`Purchase Date`, Revenue)) +
+        geom_blank() +
+        facet_grid(`Product Family` ~.)
+```
+
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=4, warning=FALSE, message=FALSE}
+p1 <- ggplot(prod_revenue, aes(`Purchase Date`, Revenue)) +
+        geom_blank() +
+        facet_grid(.~ `Product Family`)
+
+p2 <- ggplot(prod_revenue, aes(`Purchase Date`, Revenue)) +
+        geom_blank() +
+        facet_grid(`Product Family` ~.)
+grid.arrange(p1, p2, ncol = 2)
+```
+
+## Your Turn
+
+<br>
+<br>
+
+<blockquote>
+<font size="6">
+Use color, shape, size, and facetting to assess multivariate relationships between tenure, age, gender, likes, etc. in the `facebook` data.
+</font>
+</blockquote>
+
+# Visualization Aesthetics
+
+## Scales, Axes and Legends
+
+```{r, eval=FALSE}
+p <- ggplot(supermarket, aes(Revenue)) +
+        geom_histogram(bins = 100, color = "grey40", fill = "white")
+
+p + scale_x_continuous(name = "Revenue from Individual Transactions",
+                       limits = c(10, 50),
+                       breaks = seq(10, 50, by = 10),
+                       labels = scales::dollar)
+
+p + scale_x_log10(labels = scales::dollar)        
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3, warning=FALSE, message=FALSE}
+p <- ggplot(supermarket, aes(Revenue)) +
+        geom_histogram(bins = 100, color = "grey40", fill = "white")
+
+p1 <- p + scale_x_continuous(name = "Revenue from Individual Transactions",
+                       limits = c(10, 50),
+                       breaks = seq(10, 50, by = 10),
+                       labels = scales::dollar)
+
+p2 <- p + scale_x_log10(labels = scales::dollar) 
+grid.arrange(p1, p2, ncol = 2)
+```
+
+## Scales, Axes and Legends
+
+Shorthand option for controlling the axis limits: `xlim`, `ylim`, `lim`
+
+```{r, eval=FALSE}
+p + xlim(25, 55)
+
+p + ylim(0, 400)
+
+p + lims(x = c(0, 100), y = c(0, 1000))
+```
+
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3.5, warning=FALSE, message=FALSE}
+p1 <- p + xlim(25, 55)
+
+p2 <- p + ylim(0, 400)
+
+p3 <- p + lims(x = c(0, 100), y = c(0, 1000))
+grid.arrange(p1, p2, p3, ncol = 3)
+```
+
+
+## Scales, Axes and Legends
+
+Alternative is to use `coord_cartesian`; you can also rotate plots with `coord_flip`
+
+```{r, eval=FALSE}
+p + coord_cartesian(xlim = c(10, 50), ylim = c(0, 400))
+
+p + coord_flip()
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=8, fig.height=4, warning=FALSE, message=FALSE}
+p1 <- p + coord_cartesian(xlim = c(10, 50), ylim = c(0, 400))
+p2 <- p + coord_flip()
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+## Scales, Axes and Legends
+
+Shorthand option for labelling axes and legends: `labs`, `xlab`, `ylab`, `ggtitle`
+
+```{r, fig.align='center', fig.width=10, fig.height=3.5, warning=FALSE, message=FALSE}
+ggplot(prod_revenue, aes(`Purchase Date`, Revenue, color = `Product Family`)) +
+        geom_line(alpha = .2) +
+        geom_smooth(se = FALSE, span = .1) +
+        labs(x = "x-axis title", y = "y-axis title", color = "legend title", title = "Main title")
+```
+
+## Scales, Axes and Legends
+
+Legend features can be controlled with `guides` and positioning is controlled within `theme`
+
+```{r, fig.align='center', fig.width=10, fig.height=4, warning=FALSE, message=FALSE}
+ggplot(supermarket, aes(`Purchase Date`, Revenue, color = Country)) +
+        geom_point(alpha = .2) +
+        guides(color = guide_legend(override.aes = list(alpha = 1), reverse = TRUE)) +
+        theme(legend.position = "bottom")
+```
+
+## Your Turn
+
+<blockquote>
+<font size="6">
+Re-create this visualization as close as possible
+</font>
+</blockquote>
+
+<br>
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=4, warning=FALSE, message=FALSE}
+ggplot(supermarket, aes(Revenue)) +
+        geom_histogram(bins = 100, fill = "antiquewhite", color = "grey40") +
+        scale_x_continuous(limits = c(0, 60), breaks = seq(0, 60, by = 10),
+                           labels = scales::dollar) +
+        ggtitle("Gross Revenue per Transaction")
+```
+
+## Your Turn: slightly more ambitious
+
+
+```{r, echo=FALSE, fig.align='center', fig.width=6, fig.height=5.5, warning=FALSE, message=FALSE}
+cty_levels <- supermarket %>%
+        group_by(City) %>%
+        summarise(Revenue = sum(Revenue, na.rm = TRUE)) %>%
+        arrange(Revenue)
+
+city_rev <- supermarket %>%
+        group_by(City, Gender) %>%
+        summarise(Revenue = sum(Revenue, na.rm = TRUE)) %>%
+        ungroup() %>%
+        mutate(City = factor(City, levels = cty_levels$City))
+
+ggplot(city_rev, aes(Revenue, City, color = Gender)) +
+        geom_point() +
+        scale_x_continuous(labels = scales::dollar, 
+                           limits = c(0, 10000),
+                           breaks = seq(0, 10000, by = 2000)) +
+        labs(x = NULL, y = NULL, title = "Total Revenue by Gender and Location") +
+        theme_minimal()
+```
+
+## Themes
+
+Several `theme` options are available (even more in the `ggthemes` package)
+
+```{r, eval=FALSE}
+p <- ggplot(supermarket, aes(Revenue)) +
+        geom_histogram(bins = 100, fill = "antiquewhite", color = "grey40")
+
+p + theme_classic()
+p + theme_minimal()
+p + theme_dark()
+```
+
+```{r, echo=FALSE, fig.align='center', fig.width=10, fig.height=3, warning=FALSE, message=FALSE}
+p <- ggplot(supermarket, aes(Revenue)) +
+        geom_histogram(bins = 100, fill = "antiquewhite", color = "grey40")
+
+p1 <- p + theme_classic()
+p2 <- p + theme_minimal()
+p3 <- p + theme_dark()
+grid.arrange(p1, p2, p3, ncol = 3)
+```
+
+## Themes
+
+```{r, echo=FALSE}
+basic <- ggplot(prod_revenue, aes(`Purchase Date`, Revenue, color = `Product Family`)) +
+        geom_line(alpha = .2) +
+        geom_smooth(se = FALSE, span = .1) +
+        scale_y_continuous(labels = scales::dollar) +
+        labs(x = NULL, color = NULL, y = NULL, title = "Total Historical Revenue by Product Family")
+```
+
+```{r, fig.align='center', fig.width=10, fig.height=4, warning=FALSE}
+basic
+```
+
+## Themes
+
+```{r, fig.align='center', fig.width=7, fig.height=3, warning=FALSE, message=FALSE}
+basic + theme_minimal() +
+        theme(
+                text = element_text(family = "Georgia"),
+                plot.title = element_text(face = "bold", size = 16), 
+                legend.position = "top",
+                axis.ticks = element_line(colour = "grey70", size = 0.2),
+                panel.grid.major.y = element_line(linetype = "dashed", color = "darkgray"),
+                panel.grid.major.x = element_blank(),
+                panel.grid.minor = element_blank()
+        )
+```
+
+## Your Turn
+
+<blockquote>
+<font size="6">
+Using this base plot...
+</font>
+</blockquote>
+
+<br>
+
+```{r, eval=FALSE}
+ggplot(supermarket, aes(Revenue)) +
+        geom_histogram(bins = 100, fill = "antiquewhite", color = "grey40")
+```
+
+<blockquote>
+<font size="6">
+practice adjusting theme parameters.
+</font>
+</blockquote>
+
+<br><br><br><br><br><br>
+
+**Note:** check out `?theme` for details and examples on different theme parameters
+
+
+
+# Key Things to Remember
+
+## Remember These Functions!
+
+Function                Details            
+-------------           ---------       
+`ggplot()`              Call the data and map to x and y coordinates
+`geom_xx()`             Map data to geometric shape to plot on graph
+`facet_xx()`            Create small multiples by facetting
+`scale...`              Adjust x and y scale parameters
+`xlim`, `ylim`, `lims`  Shorthand for controlling axis limits
+`coord_cartesian()`     Alternative to control axis limits
+`coord_flip()`          Rotate x and y axes
+`labs`, `xlab`, `ylab`  Shorthand for creating titles
+`guides()`              Control legend features
+`theme()`               Control theme features
+-------------           ---------
+
+
+## Break {.flexbox .vcenter}
+
+<div class="centered">
+
+<font size="10">5 minutes!</font>
+
+</div>

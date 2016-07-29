@@ -10,7 +10,8 @@
 
 
 # Understanding vector properties
-
+facebook <- read.delim("data/facebook.tsv")
+likes <- facebook$likes
 
 # Extracting/subsetting vectors (vector[i])
 
@@ -18,7 +19,28 @@
 # Comparison operators
 
 
+# Subsetting data based on comparison operators
+
+
 # Summarizing vectors
+
+
+
+##############
+# YOUR TURN! #
+##############
+# Save the friend_count variable from the facebook data as a vector:
+
+fc <- facebook$friend_count
+
+# 1. What are the min, max, median, and mean number of friends?
+
+# 2. How many people have 0 friends?
+
+# 3. How many people have 1,000 or more friends?
+
+# 4. Which element contains the maximum number of friends?
+
 
 
 
@@ -32,6 +54,7 @@
 
 
 # Understanding matrix properties
+m <- matrix(runif(12), nrow = 3)
 
 
 # Extracting/subsetting matrices (matrix[row, col])
@@ -41,6 +64,25 @@
 
 
 # Summarizing matrices
+
+
+
+##############
+# YOUR TURN! #
+##############
+# Save the friend_count variable from the facebook data as a vector:
+
+fc <- facebook$friend_count
+
+# 1. Subset fc to find individuals with more than 4,600 friends
+
+
+# 2. Turn this subsetted vector into a matrix with 10 rows
+
+
+# 3. What are the dimensions of this matrix
+
+
 
 
 

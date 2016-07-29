@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# Session 3: Understanding Data Structures\n\n\n###########\n# Vectors #\n###########\n# Notes: \n\n# Creating vectors\n\n\n# Understanding vector properties\nfacebook <- read.delim(\"data/facebook.tsv\")\nlikes <- facebook$likes\n\n# Extracting/subsetting vectors (vector[i])\n\n\n# Comparison operators\n\n\n# Subsetting data based on comparison operators\n\n\n# Summarizing vectors\n\n\n\n##############\n# YOUR TURN! #\n##############\n# Save the friend_count variable from the facebook data as a vector:\n\nfc <- facebook$friend_count\n\n# 1. What are the min, max, median, and mean number of friends?\n\n# 2. How many people have 0 friends?\n\n# 3. How many people have 1,000 or more friends?\n\n# 4. Which element contains the maximum number of friends?\n\n\n\n\n\n############\n# Matrices #\n############\n# Notes: \n\n# Creating matrices\n\n\n# Understanding matrix properties\nm <- matrix(runif(12), nrow = 3)\n\n\n# Extracting/subsetting matrices (matrix[row, col])\n\n\n# Comparison operators\n\n\n# Summarizing matrices\n\n\n\n##############\n# YOUR TURN! #\n##############\n# Save the friend_count variable from the facebook data as a vector:\n\nfc <- facebook$friend_count\n\n# 1. Subset fc to find individuals with more than 4,600 friends\n\n\n# 2. Turn this subsetted vector into a matrix with 10 rows\n\n\n# 3. What are the dimensions of this matrix\n\n\n\n\n\n\n############\n# Lists #\n############\n# Notes: \n\n# Creating lists\nl1 <- list(item1 = 1:3,\n           item2 = letters[1:5],\n           item3 = c(T, F, T, T),\n           item4 = matrix(1:9, nrow = 3))\n\n\n# Understanding list properties\n\n\n# Extracting/subsetting lists \n\n\n# What you need to know - how to get results out of statistical models\nmodel <- lm(mpg ~ wt, data = mtcars)    # linear regression model\nmode(model)\n\n\n\n\n###############\n# Data Frames #\n###############\n# Notes: \n\n# Creating data frames\ndf <- data.frame(variable.1 = 1:3,\n                 variable.2 = c(\"a\", \"b\", \"c\"),\n                 variable.3 = c(TRUE, TRUE, FALSE))\n\n\n# Understanding data frame properties\n\n\n# Extracting/subsetting data frames (data.frame[row, col])\n\n\n# Conditional subsetting data frames (subset[data.frame, row condition, column selection])\n\n\n# Summarizing data frames\n\n\n\n\n\n\n\n\n\n",
+    "created" : 1469734681737.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3177076497",
+    "id" : "559B1979",
+    "lastKnownWriteTime" : 1469737517,
+    "last_content_update" : 1469737517177,
+    "path" : "~/Dropbox/Academia/University of Cincinnati/Intro to R Bootcamp/Files - students/3-data-structures-students.R",
+    "project_path" : "Files - students/3-data-structures-students.R",
+    "properties" : {
+        "tempName" : "Untitled2"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
