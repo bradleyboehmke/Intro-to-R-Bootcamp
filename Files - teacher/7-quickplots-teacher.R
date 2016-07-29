@@ -27,7 +27,6 @@ supermarket <- read_excel("data/Supermarket Transactions.xlsx", sheet = "Data")
 ###############
 # Strip Chart #
 ###############
-# Notes:
 
 # default
 stripchart(mtcars$mpg)
@@ -40,13 +39,14 @@ stripchart(facebook$tenure, pch = 16)
 #############
 # Histogram #
 #############
-# Notes:
 
 # default
 hist(facebook$tenure)     
 
 # add different parameters to change breaks, color, title, etc.
-hist()
+hist(facebook$tenure, breaks = 100, col = "grey", 
+     main = "Facebook User Tenure", xlab = "Tenure (Days)")
+
 
 # you can also compare the histogram to a normal curve to see how it deviates
 # there's a lot going on here so this is just for your reference
@@ -56,7 +56,7 @@ x <- na.omit(facebook$tenure)
 
 ## create the histogram
 h <- hist(x, breaks = 100, col = "grey", main = "Facebook User Tenure", 
-        xlab = "Tenure (Days)")
+          xlab = "Tenure (Days)")
 
 ## create normal curve data
 xfit <- seq(min(x), max(x), length = 100) 
@@ -71,33 +71,33 @@ lines(xfit, yfit, col = "red", lwd = 2)
 ################
 # Density Plot #
 ################
-# Notes:
 
 # first you need to calculate the density (be sure to remove missing data with
 # na.rm = TRUE)
 d <- density(facebook$tenure, na.rm = TRUE)
 
 # you can now use plot() to plot the density data
-plot()
+plot(d)
 
 # you can fill area under the curve with polygon()
-polygon()
+polygon(d, col = "red", border = "blue")
 
 
 
 ############
 # Box Plot #
 ############
-# Notes:
 
 # default
 boxplot(facebook$tenure)
 
 # change to horizontal
-boxplot()
+boxplot(facebook$tenure, horizontal = TRUE)
 
 # add notches
-boxplot()
+boxplot(facebook$tenure, horizontal = TRUE, notch = TRUE, col = "grey40")
+boxplot(mtcars$mpg, horizontal = TRUE, notch = TRUE, col = "grey40") # better example
+
 
 # you can also add mean value points but you can only do it to vertical boxplots
 boxplot(mtcars$mpg, notch = TRUE)
@@ -108,8 +108,8 @@ points(mean(mtcars$mpg), pch=18, col = "red")
 #############
 # Your Turn #
 #############
-# Using the facebook data visually assess the continous variables. What insights
-# do you find?
+# Using the facebook data visually assess the continous variables. 
+# What insights do you find?
 
 
 
@@ -132,7 +132,10 @@ barplot(table(reddit$dog.cat))
 
 # include and/or change features such as title, horizontal alignment, category
 # names, color
-barplot()
+pets <- table(reddit$dog.cat)
+par(las = 1)
+barplot(pets, main = "Reddit User Animal Preferences", horiz = TRUE, 
+        names.arg = c("Cats", "Dogs", "Turtles"), col = 'cyan')
 
 # plot this data
 library(dplyr)
@@ -143,7 +146,8 @@ state <- reddit %>%
         arrange(n) %>%
         filter(state != "")
 
-
+par(mar = c(3,8,1,1), las = 1)
+barplot(state$n, names.arg = state$state, horiz = TRUE)
 
 
 ############
@@ -152,7 +156,7 @@ state <- reddit %>%
 # Notes:
 
 # now plot the same state data with a dot plot
-dotchart()
+dotchart(state$n,labels = state$state, cex = .7)
 
 
 
@@ -240,7 +244,7 @@ boxplot()
 #############
 # Your Turn #
 #############
-# Using the supermarket data, analyze revenue by date, homeownership, city, product 
+# Using the supermarket data analyze revenue by date, homeownership, city, product 
 # family, etc.  Don't forget you can summarize the data using dplyr like you
 # learned about earlier...example:
 
@@ -289,8 +293,6 @@ barplot()
 
 
 # 4) etc.
-
-
 
 
 

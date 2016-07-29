@@ -192,6 +192,23 @@ names(model)
 model$residuals
 
 
+##############
+# YOUR TURN! #
+##############
+# Create this linear regression model:
+
+fb_model <- lm(friend_count ~ gender + age, data = facebook)
+
+# 1. Extract the residuals from the fb_model list
+Q1 <- fb_model$residuals
+
+# 2. What is the min, max, median, and mean of these residuals?
+summary(Q1)
+
+
+
+
+
 ###############
 # Data Frames #
 ###############
@@ -203,12 +220,62 @@ df <- data.frame(variable.1 = 1:3,
 
 
 # Understanding data frame properties
+class(facebook)
+names(facebook)
+str(facebook)
 
 
 # Extracting/subsetting data frames (data.frame[row, col])
+## extract the second column and all rows using column indexing or the name
+facebook[, 2]
+facebook[, "age"]
+
+## extract all rows and columns 1 through 3
+facebook[, 1:3]
+facebook[, c("userid", "age", "dob_day")]
+
+## subset for first row and all columns
+facebook[1, ]
+
+## use a vector to subset
+columns <- c(2, 3, 5)
+rows <- c(1:25)
+facebook[rows, columns]
 
 
 # Conditional subsetting data frames (subset[data.frame, row condition, column selection])
+subset(facebook, age == 113, 1:10)
+subset(facebook, gender == "male" & age > 35, likes)
 
 
 # Summarizing data frames
+## summarize a single variable (column)
+summary(facebook$tenure)
+
+## summarize specific variables (columns)
+summary(facebook[, c("age", "friend_count")])
+
+## summary stats for all columns
+summary(facebook)
+
+
+
+##############
+# YOUR TURN! #
+##############
+# 1. Import the reddit data located at https://bradleyboehmke.github.io/public/data/reddit.csv
+url <- "https://bradleyboehmke.github.io/public/data/reddit.csv"
+reddit <- read.csv(url)
+
+# 2. What variables (column names) does this data frame contain?
+names(reddit)
+
+# 3. How many users have the employment status of "Student"?
+summary(reddit$employment.status)
+
+# 4. Subset the reddit data frame for only those individuals that are students.
+students <- subset(reddit, employment.status == "Student")
+
+
+
+

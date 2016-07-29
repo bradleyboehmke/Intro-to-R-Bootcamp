@@ -20,8 +20,6 @@ storms
 #####################
 # pipe %>% operator #
 #####################
-# Notes: 
-
 
 # filter(data, variable == numeric_value) is the same as...
 # data %>% filter(variable == numeric_value)
@@ -50,8 +48,6 @@ mtcars %>%
 ############
 # gather() #
 ############
-# Notes: 
-
 
 # these two options are the same
 gather(data = cases, key = Year, value = n, 2:4)
@@ -63,9 +59,10 @@ cases %>% gather(Year, n, 2:4)
 # YOUR TURN! #
 ##############
 # Import the `expenditures.csv` file in the data folder
-
+expenditures <- read.csv("data/expenditures.csv")
 
 # Reshape this data from wide to long
+expenditures %>% gather(Year, Costs, 2:15)
 
 
 
@@ -74,8 +71,6 @@ cases %>% gather(Year, n, 2:4)
 ############
 # spread() #
 ############
-# Notes: 
-
 
 # if our data is wide we can spread it out
 wide <- cases %>% gather(Year, n, 2:4)
@@ -94,7 +89,7 @@ wide %>% spread(Year, n)
 long <- expenditures %>% gather(Year, Costs, 2:15)
 
 # Reshape this data from long to wide
-
+long %>% spread(Year, Costs)
 
 
 
@@ -102,8 +97,6 @@ long <- expenditures %>% gather(Year, Costs, 2:15)
 ##############
 # separate() #
 ##############
-# Notes: 
-
 
 # these two options are the same
 separate(data = storms, col = date, into = c("year", "month", "day"), sep = "-")
@@ -117,11 +110,15 @@ storms %>% separate(date, c("year", "month", "day"), sep = "-")
 # using the original expenditures data...
 
 # 1. Reshape this data from wide to long
-
+long <- expenditures %>% gather(Year, Costs, 2:15)
 
 # 2. Separate FY from the Year
+tidy <- long %>% separate(Year, into = c("Period", "Year"))
 
-
+# or...
+tidy <- expenditures %>% 
+        gather(Year, Costs, 2:15) %>%
+        separate(Year, into = c("Period", "Year"))
 
 
 
@@ -145,9 +142,12 @@ sep_col %>% unite(date, year, month, day, sep = "-")
 # YOUR TURN! #
 ##############
 # Import the facebook.tsv file in the data folder
-
+facebook <- read.delim("data/facebook.tsv")
 
 # Combine the `Period` and `Year` variables
+facebook <- facebook %>% unite(dob, dob_year, dob_month, dob_day, sep = "-")
+
+head(facebook)[,1:5]
 
 
 

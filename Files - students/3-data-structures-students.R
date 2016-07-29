@@ -108,6 +108,24 @@ l1 <- list(item1 = 1:3,
 # What you need to know - how to get results out of statistical models
 model <- lm(mpg ~ wt, data = mtcars)    # linear regression model
 mode(model)
+str(model)
+names(model)
+
+
+
+##############
+# YOUR TURN! #
+##############
+# Create this linear regression model:
+
+fb_model <- lm(friend_count ~ gender + age, data = facebook)
+
+# 1. Extract the residuals from the fb_model list
+
+
+# 2. What is the min, max, median, and mean of these residuals?
+
+
 
 
 
@@ -136,7 +154,19 @@ df <- data.frame(variable.1 = 1:3,
 
 
 
+##############
+# YOUR TURN! #
+##############
+# 1. Import the reddit data located at https://bradleyboehmke.github.io/public/data/reddit.csv
 
+
+# 2. What variables (column names) does this data frame contain?
+
+
+# 3. How many users have the employment status of "Student"?
+
+
+# 4. Subset the reddit data frame for only those individuals that are students.
 
 
 
