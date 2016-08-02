@@ -88,10 +88,15 @@ ggplot(data = supermarket, aes(x = `Product Family`)) +
 #############
 
 # 1. Assess the distribution of age, tenure, and gender in the facebook data.
+ggplot(facebook, aes(age)) +
+        geom_histogram(bins = 100, color = "grey40", fill = "white")
 
-
+ggplot(facebook, aes(gender)) +
+        geom_bar()
 
 # 2. Assess the frequency of age range, education, and income range in the reddit data.
+ggplot(reddit, aes(age.range)) +
+        geom_bar()
 
 
 ########################## BIIVARIATE GEOMS ##########################
@@ -119,7 +124,7 @@ ggplot(supermarket, aes(factor(`Units Sold`), Revenue)) +
         geom_jitter(size = 1)
 
 ggplot(supermarket, aes(factor(`Units Sold`), Revenue)) +
-        geom_jitter(size = 1, alpha = .1)
+        geom_jitter(size = 1, alpha = .5)
 
 
 
@@ -192,6 +197,14 @@ ggplot(prod_revenue, aes(x = `Product Family`, y = Revenue)) +
 # Assess bivariate relationships between tenure, age, gender, likes, etc. in 
 # the facebook data.
 
+ggplot(facebook, aes(age, likes)) +
+        geom_point(alpha = .25)
+
+ggplot(filter(facebook, gender != "NA"), aes(gender, friend_count)) +
+        geom_boxplot() +
+        coord_cartesian(ylim = c(0, 1000))
+
+
 
 
 ########################## MULTIVARIATE CAPABILITIES ##########################
@@ -255,8 +268,17 @@ ggplot(mpg, aes(displ, hwy)) +
 # Use color, shape, size, and facetting to assess multivariate relationships 
 # between tenure, age, gender, likes, etc. in the facebook data.
 
+ggplot(facebook, aes(age, color = gender)) +
+        geom_freqpoly(bins = 100)
 
+# assess friendships initiated by gender for Generation Y users
+gen_y <- facebook %>%
+        filter(dob_year >= 1990, gender != "NA")
 
+ggplot(gen_y, aes(friendships_initiated, color = gender)) +
+        geom_freqpoly(bins = 100) +
+        facet_wrap(~ dob_year) +
+        scale_x_log10()
 
 
 ########################## Visualization Aesthetics ##########################
@@ -315,8 +337,36 @@ ggplot(supermarket, aes(`Purchase Date`, Revenue, color = Country)) +
 
 # Try to re-create displayed visualization as close as possible
 
+ggplot(supermarket, aes(Revenue)) +
+        geom_histogram(bins = 100, fill = "antiquewhite", color = "grey40") +
+        scale_x_continuous(limits = c(0, 60), breaks = seq(0, 60, by = 10),
+                           labels = scales::dollar) +
+        ggtitle("Gross Revenue per Transaction")
 
 
+# harder one
+
+## arrange cities by revenue
+cty_levels <- supermarket %>%
+        group_by(City) %>%
+        summarise(Revenue = sum(Revenue, na.rm = TRUE)) %>%
+        arrange(Revenue)
+
+## summarise revenue by cities and gender and then set order of city
+## with factor and levels
+city_rev <- supermarket %>%
+        group_by(City, Gender) %>%
+        summarise(Revenue = sum(Revenue, na.rm = TRUE)) %>%
+        ungroup() %>%
+        mutate(City = factor(City, levels = cty_levels$City))
+
+ggplot(city_rev, aes(Revenue, City, color = Gender)) +
+        geom_point() +
+        scale_x_continuous(labels = scales::dollar, 
+                           limits = c(0, 10000),
+                           breaks = seq(0, 10000, by = 2000)) +
+        labs(x = NULL, y = NULL, title = "Total Revenue by Gender and Location") +
+        theme_minimal()
 
 
 ##########

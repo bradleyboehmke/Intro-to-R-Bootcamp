@@ -47,6 +47,8 @@ hist(facebook$tenure)
 hist(facebook$tenure, breaks = 100, col = "grey", 
      main = "Facebook User Tenure", xlab = "Tenure (Days)")
 
+# get probabilities versus counts by entering probability = TRUE
+hist(facebook$tenure, breaks = 100, col = "grey", probability = TRUE)
 
 # you can also compare the histogram to a normal curve to see how it deviates
 # there's a lot going on here so this is just for your reference
@@ -111,11 +113,15 @@ points(mean(mtcars$mpg), pch=18, col = "red")
 # Using the facebook data visually assess the continous variables. 
 # What insights do you find?
 
+# Example 1 - age of users
+hist(facebook$age, breaks = 100, col = "grey", main = "Age of Facebook Users", 
+     xlab = "Age (Years)")
 
+# Example 2 - friend count of users
+hist(facebook$friend_count, breaks = 100, col = "grey")
+hist(log10(facebook$friend_count), breaks = 100, col = "grey")
 
-
-
-
+# Example 3 - anyone want to share?
 
 
 #############
@@ -156,10 +162,7 @@ barplot(state$n, names.arg = state$state, horiz = TRUE)
 # Notes:
 
 # now plot the same state data with a dot plot
-dotchart(state$n,labels = state$state, cex = .7)
-
-
-
+dotchart(state$n, labels = state$state, cex = .7)
 
 
 
@@ -169,12 +172,26 @@ dotchart(state$n,labels = state$state, cex = .7)
 # Using the Reddit data... 
 
 # 1) assess the frequency of education levels
+reddit_ed <- reddit %>%
+        group_by(education) %>%
+        tally() %>%
+        filter(education != "NA") %>%
+        arrange(n)
 
-
+par(mar = c(5,15,1,1), las = 1)
+barplot(reddit_ed$n, names.arg = reddit_ed$education, horiz = TRUE)
 
 # 2) assess how the different cheeses rank with Reddit users. What do you find?
+cheese <- reddit %>%
+        group_by(cheese) %>%
+        tally() %>%
+        filter(cheese != "NA") %>%
+        arrange(n)
 
+dotchart(cheese$n, labels = cheese$cheese, bg = "yellow")
 
+# reset margins
+par(mar = c(5, 4, 4, 2))
 
 
 
@@ -191,8 +208,8 @@ plot(x = race$Black_unemployment, y = race$black_college)
 # you can fit lines to the scatter plot to assess its linearity; note that you 
 # need to use "~" rather than "x =" and "y ="
 plot(White_unemployment ~ Black_unemployment, data = race)
-abline()
-lines()
+abline(lm(White_unemployment ~ Black_unemployment, data = race), col = "red")
+lines(lowess(race$White_unemployment ~ race$Black_unemployment), col = "blue")
 
 # quickly assess multiple scatter plots with pairs()
 pairs(race)
@@ -234,10 +251,10 @@ legend("topleft", legend = c("HS Rate", "College Rate", "Unemployment"),
 
 # turn this single variable boxplot into two box plots comparing gender
 boxplot(supermarket$Revenue)
-boxplot()
+boxplot(Revenue ~ Gender, data = supermarket)
 
 # add a third variable for marital status
-boxplot()
+boxplot(Revenue ~ Gender + `Marital Status`, data = supermarket)
 
 
 
@@ -248,16 +265,22 @@ boxplot()
 # family, etc.  Don't forget you can summarize the data using dplyr like you
 # learned about earlier...example:
 
-## this sums total sales by data
-supermarket %>%
+## total revenues by date
+revenue_by_date <- supermarket %>%
         group_by(`Purchase Date`) %>%
         summarise(Revenue = sum(Revenue, na.rm = TRUE))
 
+plot(Revenue ~ `Purchase Date`, data = revenue_by_date, type = "l", col = "grey")
+lines(lowess(revenue_by_date$Revenue ~ revenue_by_date$`Purchase Date`, f = 1/4), col = "blue")
 
 
+## revenue by product category
+par(mar = c(5, 10, 4, 2))
+boxplot(Revenue ~ `Product Category`, data = supermarket, horizontal = TRUE)
 
 
-
+# reset margins
+par(mar = c(5, 4, 4, 2))
 
 ######################
 # Bar Charts...again #
@@ -275,8 +298,8 @@ barplot(counts, col = c("darkblue", "red"), legend = c("Married", "Single"), bes
 proportions <- prop.table(counts)
 
 # now plot these results in a similar manner as above
-barplot()
-
+barplot(proportions, col = c("darkblue", "red"), legend = c("Married", "Single"))
+barplot(proportions, col = c("darkblue", "red"), legend = c("Married", "Single"), beside = TRUE)
 
 
 #############
@@ -284,13 +307,28 @@ barplot()
 #############
 # Using the reddit data compare counts of...
 # 1) product family by homeownership
+Q1 <- table(supermarket$`Product Family`, supermarket$Homeowner)
+
+barplot(Q1, beside = TRUE, legend.text = TRUE)
 
 
 # 2) annual income by homeownership
+supermarket$`Annual Income` <- factor(supermarket$`Annual Income`, 
+                                      levels = c("$10K - $30K", "$30K - $50K",
+                                                 "$50K - $70K", "$70K - $90K",
+                                                 "$90K - $110K", "$110K - $130K",
+                                                 "$130K - $150K", "$150K +"))
 
+Q2 <- prop.table(table(supermarket$`Annual Income`, supermarket$Homeowner))
+
+barplot(Q2, legend.text = TRUE, 
+        args.legend = list(x = "topleft", cex = 1, bty = "n", y.intersp=1.5))
 
 # 3) country by gender
+Q3 <- prop.table(table(supermarket$Gender, supermarket$Country))
 
+barplot(Q3, beside = TRUE, legend.text = c("Female", "Male"), col = c("pink", "blue"),
+        args.legend = list(x = "topleft", cex = 1.5, bty = "n", y.intersp=1.5))
 
 # 4) etc.
 

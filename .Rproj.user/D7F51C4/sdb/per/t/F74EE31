@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# Download the Police Crime Incident Data at \n# https://data.cincinnati-oh.gov/Safer-Streets/Police-Crime-Incident-Data/w7vh-beui\n\n\n# What are the top 10 most prevelant offenses in this data set?\n\n\n\n\n# Are the rate of occurrences for these offenses increasing or decreasing?\n\n\n\n\n# What are the top 10 most prevelant offenses so far this year?\n\n\n\n\n# What neighborhoods are these offenses most often occuring in?\n\n\n\n\n\n\n",
+    "created" : 1470080609727.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1345466120",
+    "id" : "F74EE31",
+    "lastKnownWriteTime" : 1470083429,
+    "last_content_update" : 1470083429,
+    "path" : "~/Dropbox/Academia/University of Cincinnati/Intro to R Bootcamp/Files - students/9-case-study-1.R",
+    "project_path" : "Files - students/9-case-study-1.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
