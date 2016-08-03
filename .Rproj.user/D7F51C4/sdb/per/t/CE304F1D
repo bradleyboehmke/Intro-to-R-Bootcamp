@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# Download the most recent Occupational Employment Statistics data (May 2015)\n# from https://www.dropbox.com/s/5cagoqaa67uix3e/all_data_M_2015.xlsx?dl=0\n\n\n\n# How does Cincinnati rank nationally for median annual wage across all occupations & industries?\n# Note, you only want to compare Cincinnati to other Metropolitan Statistical Areas\n\n\n\n\n# How does Cincinnati rank among the following locations for median annual wage and\n# also total employment\n\n\n\n\n# Identify the top 25 occupations that employ the most people in Cincinnati\n\n\n\n\n# Do these occupations provide the top paying salaries? If not, which occupations do?\n\n\n\n\n",
+    "created" : 1470149852673.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2919441541",
+    "id" : "CE304F1D",
+    "lastKnownWriteTime" : 1470149932,
+    "last_content_update" : 1470149932641,
+    "path" : "~/Dropbox/Academia/University of Cincinnati/Intro to R Bootcamp/Files - students/10-case-study-2.R",
+    "project_path" : "Files - students/10-case-study-2.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
