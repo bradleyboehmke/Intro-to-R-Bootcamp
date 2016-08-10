@@ -88,7 +88,7 @@ View(pew)
 
 # scraping text files
 url <- "https://www.data.gov/media/federal-agency-participation.csv" 
-data_gov <- read.csv(url, stringsAsFactors = FALSE)
+data_gov <- read.csv(url)
 
 View(data_gov)
 
@@ -98,7 +98,7 @@ library(gdata)
 url <- "http://www.huduser.org/portal/datasets/fmr/fmr2015f/FY2015F_4050_Final.xls"
 rents <- read.xls(url)
 
-View(data_gov)
+View(rents)
 
 
 

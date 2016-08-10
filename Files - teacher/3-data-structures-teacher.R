@@ -43,8 +43,8 @@ likes[c(10, 13512, 3778, 59131)]
 
 
 ## extract elements based on another vector
-subset_vector <- c(10, 13512, 3778, 59131)
-likes[subset_vector]
+subset_vector <- c(10, 13512, 3778, 59131, 99004)
+x <- likes[subset_vector]
 
 
 # Comparison operators
@@ -54,7 +54,7 @@ normal <- likes > 0 & likes < 5000
 know_somebody <- likes != 0
 
 sum(viral)
-sum(viral)/length(likes)
+sum(viral) / length(likes)
 which(viral)
 
 

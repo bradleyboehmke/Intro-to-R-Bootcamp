@@ -31,10 +31,10 @@ output:
 
 - Me
 
-### TA
+### Time & Location
 
-   - TBD
-   - TBD
+   - Time: 1:15 - 4:15
+   - Location: Lindner 608
 
 ### Website
 

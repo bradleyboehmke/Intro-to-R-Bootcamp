@@ -90,7 +90,7 @@ x * y
 x > y
 
 long <- 1:10
-short <- 1:5
+short <- 1:4
 
 long + short
 
@@ -132,9 +132,9 @@ install.packages("lubridate")
 # Using Packages #
 ##################
 
-library(dplyr)                  # activate package
-help(package = "dplyr")         # provides details regarding package
-vignette(package = "dplyr")     # list vignettes available for a package
+library(dplyr)                                  # activate package
+help(package = "dplyr")                         # provides details regarding package
+vignette(package = "dplyr")                     # list vignettes available for a package
 vignette("introduction", package = "dplyr")     # view specific vignette
 
 

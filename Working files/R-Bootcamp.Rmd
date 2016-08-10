@@ -31,10 +31,10 @@ output:
 
 - Me
 
-### TA
+### Time & Location
 
-   - TBD
-   - TBD
+   - Time: 1:15 - 4:15
+   - Location: Lindner 608
 
 ### Website
 
@@ -43,8 +43,8 @@ output:
 
 
 ### What are we doing?
-- Day 1: R Programming literacy
-- Day 2: Data visualization
+- R Programming literacy
+- Data visualization
 
 ### Requirements
 - Computer
@@ -63,27 +63,46 @@ output:
 
 <br>
 
+
+### Objectives
+Upon successfully completing this course, students will: 
+
+- Be up and running with R
+- Understand the different types of data R can work with
+- Understand the different structures in which R holds data
+- Be able to import data into R
+- Perform basic data wrangling activities with R
+- Compute basic descriptive statistics with R
+- Visualize their data with base R and ggplot graphics
+
+
+## Short Course Schedule & Material
+
+
 <div class="columns-2">
 ### Today
 - Getting started with R
 - Importing data into R
 - Understanding data structures
 - Understanding data types
-- Shaping and transforming your data
-- Descriptive statistics
 
-<br>
+<br><br><br><br><br>
 
 ### Tomorrow
+- Shaping and transforming your data
 - Base R graphics
 - ggplot graphics library
-- visualizing distributions
-- visualizing categorical data
-- visualizing 2 variables
-- visualizing time series
-- visualizing 3+ variables
+- case studies
+
+<br><br><br><br><br>
+
 </div>
 
+All required classroom material can be downloaded from the course website:
+<br><br>
+<center>
+[http://uc-r.github.io/r_bootcamp](http://uc-r.github.io/r_bootcamp)
+</center>
 
 # Analytics & Programming
 
@@ -242,10 +261,9 @@ example(functionname)
 
 External to R:
 
-- `RSiteSearch("key phrase")`: searches for the key phrase in help manuals and archived mailing lists on the [R Project website](http://search.r- project.org/).
+- [**Google:**](https://www.google.com) just add "with R" at the end of any search.
 - [**Stack Overflow:**](http://stackoverflow.com/) a searchable Q&A site oriented toward programming issues. 75% of my answers typically come from Stack Overflow.
 - [**Cross Validated:**](http://stats.stackexchange.com/) a searchable Q&A site oriented toward statistical analysis.
-- [**R-seek:**](http://rseek.org) a Google custom search that is focused on R-specific websites
 - [**R-bloggers:**](http://www.r- bloggers.com/) a central hub of content from over 500 bloggers who provide news and tutorials about R.
 
 
@@ -282,7 +300,7 @@ Set your working directory to the "R-Bootcamp" folder you downloaded for this co
 
 R can be used as a simple calculator
 ```{r, echo=TRUE, collapse=TRUE}
-# Uses PEMBDAS convention for order of operations
+# Uses PEMDAS convention for order of operations
 4 + 3 / 10 ^ 2
 4 + (3 / 10 ^ 2)
 (4 + 3) / 10 ^ 2
@@ -545,7 +563,7 @@ install.packages("lubridate")
 install.packages(c("dplyr", "tidyr", "ggplot2", "stringr", "lubridate"))
 ```
 
-For a full list of useful packages see this [guide](https://support.rstudio.com/hc/en- us/articles/201057987- Quick- list- of- useful- R- packages)
+For a full list of useful packages see this [guide](https://support.rstudio.com/hc/en-us/articles/201057987-Quick-list-of-useful-R-packages)
 
 
 ## Using Packages
